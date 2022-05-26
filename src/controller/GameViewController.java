@@ -1,6 +1,7 @@
 package controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 
@@ -18,7 +19,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
 import model.Player;
 import model.Shot;
 
@@ -30,6 +30,9 @@ public class GameViewController implements Initializable {
 	//Attributes
 	private Main main;
 	private Player tempPlayer;
+	@SuppressWarnings("unused")
+	private ArrayList<Shot> tempShot;
+	
 	
 	@FXML
 	private Canvas gameCanvas;
@@ -37,13 +40,20 @@ public class GameViewController implements Initializable {
 	private Button startButton;
 	
 	private GraphicsContext gc;
+	private GraphicsContext gcShot;
 	
 	private Media sound;
 	
-	private Image img3 = new Image("media/shot.png");
 	
+	@SuppressWarnings("unused")
+	private boolean left;
+	@SuppressWarnings("unused")
+	private boolean right;
+	@SuppressWarnings("unused")
+	private boolean space;
 	
-	
+	private volatile boolean stopAll = false;
+
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -56,10 +66,102 @@ public class GameViewController implements Initializable {
 		
 		gc = gameCanvas.getGraphicsContext2D();
 		
+		gcShot = gameCanvas.getGraphicsContext2D();
 		
+		
+			
 		
 	}
 
+	
+
+	
+	@FXML
+	void startGame(ActionEvent e) {
+		
+		tempPlayer = main.getPlayerInformation();
+		
+		startButton.setDisable(true);
+		setUpGame();
+		
+		//validateShot();
+		shot();
+	}
+	
+
+	
+	@FXML
+	void keyPressed(KeyEvent e) {
+		
+		if(e.getCode() == KeyCode.LEFT) {
+		
+			moveLeft();
+		}
+		else if(e.getCode() == KeyCode.RIGHT) {
+	
+			moveRight();
+		}
+		else if(e.getCode() == KeyCode.SPACE) {
+	
+			main.addShot(tempPlayer.getPosX(),tempPlayer.getPoxY());
+			soundShot();
+
+
+		}
+	
+		
+	}
+	
+	
+	
+	private void moveRight() {
+		new Thread(()->{
+			Platform.runLater(() ->{
+				
+				
+				
+				tempPlayer = main.getPlayerInformation();
+				
+				clear();
+				
+				//Move left
+				uptadePlayer(1);
+				
+				paint();
+
+			});
+		}).start();
+	}
+	
+	private void moveLeft() {
+	
+		new Thread(()->{
+
+			Platform.runLater(() ->{
+				
+				
+		
+				tempPlayer = main.getPlayerInformation();
+				
+				clear();
+				
+				//Move left
+				uptadePlayer(2);
+				
+				paint();
+
+			});
+
+
+			
+		}).start();;
+		
+	}
+	
+	private void uptadePlayer(int id) {
+		main.setPlayer(id);
+	}
+	
 	public void setUpGame() {
 		
 		Player p = main.getPlayerInformation();
@@ -69,9 +171,25 @@ public class GameViewController implements Initializable {
 		
 		
 		gc.drawImage(img, p.getPosX(), p.getPoxY(), p.getWidth(), p.getHeight());
+	
 		
-		gc.drawImage(img3, 200, 200,35,35);
+	}
+	
+
+	
+	private void paintShot(ArrayList<Shot> s){
 		
+		for(int i = 0;i<s.size();i++) {
+			Shot aux = s.get(i);
+			
+			Platform.runLater(() ->{
+				gcShot.drawImage(aux.getImg(), aux.getPosX(), aux.getPosY(), 
+						aux.getWidth(), aux.getHeight());
+			});
+		}
+
+		
+
 	}
 	
 	private void paint() {
@@ -97,145 +215,64 @@ public class GameViewController implements Initializable {
 		gc.clearRect(tempPlayer.getPosX(), tempPlayer.getPoxY(), 
 				tempPlayer.getWidth(),tempPlayer.getHeight());
 	}
-	@FXML
-	void startGame(ActionEvent e) {
+	
+	private void clearShot(ArrayList<Shot> s) {
 		
-		tempPlayer = main.getPlayerInformation();
-		
-		startButton.setDisable(true);
-		setUpGame();
-	}
-	
-	
-	
-	@FXML
-	void keyPressed(KeyEvent e) {
-		if(e.getCode() == KeyCode.LEFT) {
-			moveLeft();
-		}
-		else if(e.getCode() == KeyCode.RIGHT) {
-			moveRight();
-		}
-		else if(e.getCode() == KeyCode.SPACE) {
-			soundShot();
-			shot();
-		}
-		
-	}
-	
-	
-	
-	private void moveRight() {
-		new Thread(()->{
-			Platform.runLater(() ->{
-				
-				
-				
-				tempPlayer = main.getPlayerInformation();
-				
-				clear();
-				
-				//Move left
-				uptadePlayer(1);
-				
-				paint();
-
-			});
-		}).start();;
-	}
-	
-	private void moveLeft() {
-	
-		new Thread(()->{
-
-			Platform.runLater(() ->{
-				
-				
-				
-				tempPlayer = main.getPlayerInformation();
-				
-				clear();
-				
-				//Move left
-				uptadePlayer(2);
-				
-				paint();
-
-			});
-
-
+		for(int i = 0;i<s.size();i++) {
 			
-		}).start();;
+			Shot aux = s.get(i);
+			
+			gcShot.clearRect(aux.getPosX(),aux.getPosY(),aux.getWidth(),aux.getHeight());
+			
+		}
+		
 		
 	}
 	
-	private void uptadePlayer(int id) {
-		main.setPlayer(id);
-	}
 	
+
 	private void shot() {
 		new Thread(() ->{
-			
-			boolean stop = true;
-			
-			main.setShot(tempPlayer);
-			
-			while(stop == true) {
-				
-				try {
-					Thread.sleep(1000/100);
+
+				while(stopAll == false) {
 					
-					stop = main.shottingMain();
-					painShot();
+					ArrayList<Shot> temp = main.getShotList();
 					
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					if(temp.size()>0) {
+						
+						paintShot(temp);
+						
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						clearShot(temp);
+						
+						main.updateShots();
+						
+						
+						
+						temp = main.getShotList();
+						
+					}
+
 				}
-					
-				
-				
-			
-			}
-			
+
 			
 		}).start();
 	}
 	
-	private void painShot(){
-		
-		Platform.runLater(() ->{
-			
-			
-			Shot s = main.getShot();
-			
-			Image img = s.getImg();
-			
-			
-			
-			gc.drawImage(img,s.getPosX(),s.getPosY(),25,25);
-			
-
-		});
-		
-		
-		
-	}
-	
-	
-	
 
 	private void soundShot() {
 		
+		MediaPlayer player = new MediaPlayer(sound);
 		
-		new Thread(() ->{
-			
-			MediaPlayer player = new MediaPlayer(sound);
-			
-			player.play();
-			
-
-		}).start();;
+		player.play();
+		
+	
 	}
 	
 	public void setMain(Main main) {

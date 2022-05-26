@@ -1,18 +1,21 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Controller {
 	
 	private static final int WIDTHGAME = 750;  
 	private static final int HEIGHTGAME = 550;	
-	private static final int MOVEMENT = 2;
+	private static final int MOVEMENT = 5;
 
 	private Player player;
-	private Shot shot;
+	private ArrayList<Shot> shotsList;
 	
 	
 	public Controller() {
 		super();
 		
+		shotsList = new ArrayList<Shot>();
 
 		
 		int posX = (WIDTHGAME /2)-20;
@@ -22,12 +25,15 @@ public class Controller {
 		
 		player.setDeltaX(MOVEMENT);
 		
-		shot = new Shot(posX,posY);
+	
 		
-		shot.setDeltaY(MOVEMENT);
-
 	}
 	
+	public void addShot(int posX, int posY){
+		
+		Shot temp = new Shot(posX,posY-15);
+		shotsList.add(temp);
+	}	
 	//
 	// === GETTERS AND SETTERS
 	//
@@ -50,20 +56,6 @@ public class Controller {
 		}
 	}
 
-	public boolean shotingGun() {
-	
-		
-		if(shot.getPosY()<0) {
-			return false;
-		}
-		else {
-			shot.move();
-			return true;
-		}
-		
-		
-	}
-
 	public Player getPlayer() {
 		return player;
 	}
@@ -72,15 +64,37 @@ public class Controller {
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	
-	public Shot getShot() {
-		return shot;
+
+	public ArrayList<Shot> getShotsList() {
+		return shotsList;
+	}
+
+	public void setShotsList(ArrayList<Shot> shotsList) {
+		this.shotsList = shotsList;
 	}
 	
-	public void setShot(Player p) {
-		shot.setPosX(p.getPosX());
-		shot.setPosY(p.getPoxY());
+	public int getShotsListSize() {
+		return shotsList.size();
 	}
+	
+	public void updateShots() {
+		for(int i = 0;i<shotsList.size();i++) {
+			if(shotsList.get(i).getPosY()==0) {
+				shotsList.remove(i);
+				
+			}
+			else {
+				shotsList.get(i).move();
+			}
+			
+		}
+	}
+	
+
+	
+	
+	
+	
 	
 	
 	

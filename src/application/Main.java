@@ -1,6 +1,7 @@
 package application;
 	
 import java.io.IOException;
+import java.util.ArrayList;
 
 import controller.GameViewController;
 import javafx.application.Application;
@@ -72,17 +73,21 @@ public class Main extends Application {
 		
 	}
 	
-	public void setShot(Player p) {
-		gameController.setShot(p);
+	public void setPlayer(int id) {
+		gameController.updatePlayer(id);
 	}
 	
-	public boolean shottingMain() {
-		
-		return gameController.shotingGun();
+	public void addShot(int posX, int posY) {
+		gameController.addShot(posX, posY);
 	}
 	
-	public Shot getShot() {
-		return gameController.getShot();
+	public void updateShots() {
+		gameController.updateShots();
+	}
+	
+	
+	public ArrayList<Shot> getShotList(){
+		return gameController.getShotsList();
 	}
 	
 	
@@ -90,9 +95,12 @@ public class Main extends Application {
 		launch(args);
 	}
 	
-	public void setPlayer(int id) {
-		gameController.updatePlayer(id);
-	}
+
+
+	
+	
+	
+	
 	
 	
 

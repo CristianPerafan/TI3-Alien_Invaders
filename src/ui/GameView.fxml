@@ -14,7 +14,7 @@
       </AnchorPane>
    </bottom>
    <center>
-      <AnchorPane onKeyPressed="#keyPressed" prefHeight="550.0" prefWidth="750.0" style="-fx-background-color: #212121;" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="550.0" prefWidth="750.0" style="-fx-background-color: #212121;" BorderPane.alignment="CENTER">
          <children>
             <Canvas fx:id="gameCanvas" height="550.0" onKeyPressed="#keyPressed" width="750.0" />
          </children>

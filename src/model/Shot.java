@@ -8,7 +8,8 @@ public class Shot {
 	private int posX;
 	private int posY;
 	private int deltaY;
-	
+	private int width;
+	private int height;
 	private Image img;
 
 	public Shot(int posX, int posY) {
@@ -16,6 +17,9 @@ public class Shot {
 		img = new Image("/media/shot.png");
 		this.posX = posX;
 		this.posY = posY;
+		width = 25;
+		height = 25;
+		deltaY = 10;
 	}
 	
 	
@@ -63,6 +67,45 @@ public class Shot {
 	public void move() {
 		posY -= deltaY;
 	}
+
+
+
+	public int getWidth() {
+		return width;
+	}
+
+
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+
+
+	public int getHeight() {
+		return height;
+	}
+
+
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Shot [posX=" + posX + ", posY=" + posY+"]";
+	}
+	
+	
+
+
+
+
+	
+	
 	
 	
 	
