@@ -4,6 +4,9 @@ import javafx.scene.image.Image;
 
 public class Shot {
 	
+	static final int WIDTH = 20;  
+	static final int HEIGHT = 20;	
+	
 	//Attributes
 	private int posX;
 	private int posY;
@@ -17,8 +20,8 @@ public class Shot {
 		img = new Image("/media/shot.png");
 		this.posX = posX;
 		this.posY = posY;
-		width = 25;
-		height = 25;
+		width = WIDTH;
+		height = HEIGHT;
 		deltaY = 10;
 	}
 	

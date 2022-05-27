@@ -19,6 +19,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import model.Alien;
 import model.Player;
 import model.Shot;
 
@@ -30,8 +31,7 @@ public class GameViewController implements Initializable {
 	//Attributes
 	private Main main;
 	private Player tempPlayer;
-	@SuppressWarnings("unused")
-	private ArrayList<Shot> tempShot;
+
 	
 	
 	@FXML
@@ -41,6 +41,7 @@ public class GameViewController implements Initializable {
 	
 	private GraphicsContext gc;
 	private GraphicsContext gcShot;
+	private GraphicsContext gcAlien;
 	
 	private Media sound;
 	
@@ -68,6 +69,8 @@ public class GameViewController implements Initializable {
 		
 		gcShot = gameCanvas.getGraphicsContext2D();
 		
+		gcAlien = gameCanvas.getGraphicsContext2D();
+		
 		
 			
 		
@@ -86,6 +89,9 @@ public class GameViewController implements Initializable {
 		
 		//validateShot();
 		shot();
+		
+		main.startEnemies();
+		enemies();
 	}
 	
 
@@ -226,6 +232,64 @@ public class GameViewController implements Initializable {
 			
 		}
 		
+		
+	}
+	
+	private void enemies() {
+		new Thread(()-> {
+			while(stopAll == false ) {
+				
+				
+				
+				Alien[] enemies = main.getEnemies();
+				
+				
+				paintEnemies(enemies);
+				
+				
+				
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				clearEnemies(enemies);
+				
+				
+				
+			}
+		}).start();;
+	}
+	
+	private void clearEnemies(Alien[] e) {
+		for (int i = 0; i < e.length; i++) {
+			Alien temp = e[i];
+			
+			
+			Platform.runLater(() ->{
+				gcAlien.clearRect(temp.getPosX(), temp.getPosY()-temp.getHeight()+10, temp.getWidth(),temp.getHeight());
+			});
+			
+
+			
+		}
+	}
+	
+	private void paintEnemies(Alien[] e) {
+		
+		for (int i = 0; i < e.length; i++) {
+			Alien temp = e[i];
+			
+			Platform.runLater(() ->{
+				gcAlien.drawImage(temp.getImg(),temp.getPosX(),temp.getPosY(),temp.getWidth(),
+						temp.getHeight());
+				
+			});
+		
+		
+		}
 		
 	}
 	

@@ -4,12 +4,16 @@ import java.util.ArrayList;
 
 public class Controller {
 	
-	private static final int WIDTHGAME = 750;  
-	private static final int HEIGHTGAME = 550;	
-	private static final int MOVEMENT = 5;
+	static final int WIDTHGAME = 750;  
+	static final int HEIGHTGAME = 550;	
+	static final int MOVEMENT = 8;
+	static final int ENEMIES = 9; 
 
+	
+	//Attributes
 	private Player player;
 	private ArrayList<Shot> shotsList;
+	private Alien [] enemiesList;
 	
 	
 	public Controller() {
@@ -25,13 +29,36 @@ public class Controller {
 		
 		player.setDeltaX(MOVEMENT);
 		
-	
+		enemiesList = new Alien[ENEMIES];
+		
+		setUpEnemies();
 		
 	}
 	
+	private void setUpEnemies() {
+		int posX = 50;
+		int posY = 70;
+		for(int i = 0;i<ENEMIES;i++) {
+			enemiesList[i] = new Alien(posX,posY);
+			posX += 100;
+		}
+	}
+	
+	public void startEnemies() {
+		for(int i = 0;i<ENEMIES;i++) {
+			enemiesList[i].start();
+		}
+	}
+	
+	
+	public Alien[] getEnemiesList() {
+		return enemiesList;
+	}
+
+
 	public void addShot(int posX, int posY){
 		
-		Shot temp = new Shot(posX,posY-15);
+		Shot temp = new Shot(posX+15,posY-15);
 		shotsList.add(temp);
 	}	
 	//

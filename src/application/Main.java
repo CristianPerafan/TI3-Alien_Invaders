@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import model.Alien;
 import model.Controller;
 import model.Player;
 import model.Shot;
@@ -85,11 +86,22 @@ public class Main extends Application {
 		gameController.updateShots();
 	}
 	
+	public void startEnemies() {
+		gameController.startEnemies();
+	}
+	
+
+
+	
 	
 	public ArrayList<Shot> getShotList(){
 		return gameController.getShotsList();
 	}
 	
+	
+	public Alien[] getEnemies() {
+		return gameController.getEnemiesList();
+	}
 	
 	public static void main(String[] args) {
 		launch(args);

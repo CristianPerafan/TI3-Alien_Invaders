@@ -16,13 +16,13 @@ public class Player {
 	public Player(int posX, int poxY) {
 		super();
 		
-		imgPlayer = new Image("/media/nave.png");
+		imgPlayer = new Image("/media/s.png");
 		
 		this.posX = posX;
 		this.poxY = poxY;
 		
-		width = 50;
-		height = 50;
+		width = 60;
+		height = 60;
 		
 	}
 	
