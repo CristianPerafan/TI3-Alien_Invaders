@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import controller.GameViewController;
+import controller.MenuController;
+import controller.RegisterController;
+import controller.ScoreController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,8 +30,8 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			gameController = new Controller();
-			
-			gameView();
+			showMenuView();
+			//gameView();
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -111,11 +114,61 @@ public class Main extends Application {
 		launch(args);
 	}
 	
-
+	public void showMenuView() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/MenuView.fxml"));
+			BorderPane root;
+			root = (BorderPane)loader.load();
+			MenuController controller = loader.getController();
+			controller.setMain(this);
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("../ui/application.css").toExternalForm());
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.show();
+			currentStage = stage;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
+	public void showRegisterView() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/RegisterView.fxml"));
+			BorderPane root;
+			root = (BorderPane)loader.load();
+			RegisterController controller = loader.getController();
+			controller.setMain(this);
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("../ui/application.css").toExternalForm());
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			currentStage.close();
+			stage.show();
+			currentStage = stage;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	
+	}
 	
-
+	public void showScoreView() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/ScoreView.fxml"));
+			BorderPane root;
+			root = (BorderPane)loader.load();
+			ScoreController controller = loader.getController();
+			controller.setMain(this);
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("../ui/application.css").toExternalForm());
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.show();
+			currentStage = stage;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	
 	
