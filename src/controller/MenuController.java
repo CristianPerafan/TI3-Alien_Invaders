@@ -22,4 +22,5 @@ public class MenuController {
 	public void lookScores(ActionEvent event) {
 		main.showScoreView();
 	}
+	
 }

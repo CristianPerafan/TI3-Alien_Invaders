@@ -169,6 +169,10 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	public void setNamePlayer(String name) {
+		gameController.setPlayerName(name);
+	}
 
 	
 	
