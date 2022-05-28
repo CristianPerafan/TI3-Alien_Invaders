@@ -30,6 +30,7 @@ public class GameViewController implements Initializable {
 	private Main main;
 	private Player tempPlayer;
 
+
 	@FXML
 	private Canvas gameCanvas;
 	@FXML
@@ -236,8 +237,6 @@ public class GameViewController implements Initializable {
 				
 				Alien[] enemies = main.getEnemies();
 				
-				//System.out.println("index: " + enemies.length);
-				
 				paintEnemies(enemies);
 				
 
@@ -266,56 +265,50 @@ public class GameViewController implements Initializable {
 		}
 	}
 	
-	private void deleteEnemies(ArrayList<Alien> enemies) {
+	private void showBurst(Alien e) {
 		new Thread(() ->{
+			
+			Platform.runLater(() ->{
+				gcAlien.drawImage(e.getImg(),e.getPosX(),e.getPosY(),e.getWidth(),
+						e.getHeight());
+			});
+			
 			try {
-				
-				for(int i = 0; i<enemies.size();i++) {
-					
-					paintEnemies(enemies.get(i));
-					Thread.sleep(1000);
-					clearEnemies(enemies.get(i));
-				}
-			} catch (InterruptedException e) {
+				Thread.sleep(2000);
+			} catch (InterruptedException e1) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e1.printStackTrace();
 			}
 			
+			Platform.runLater(() ->{
+				gcAlien.clearRect(e.getPosX(),e.getPosY(),e.getWidth(),
+						e.getHeight());
+			});
+			
+			
+		
 		}).start();
+		
 	}
 	
-	private void paintEnemies(Alien e) {
-		
-		Platform.runLater(() ->{
-			gcAlien.drawImage(e.getImg(),e.getPosX(),e.getPosY(),e.getWidth(),
-					e.getHeight());
-		});
-	}
-	private void clearEnemies(Alien e) {
-	
-		Platform.runLater(() ->{
-			gcAlien.clearRect(e.getPosX(), e.getPosY()-e.getHeight()+10, e.getWidth(),e.getHeight());
-		});
-		
-		
-	}
+
 	private void paintEnemies(Alien[] e) {
 		
 		for (int i = 0; i < e.length; i++) {
 			
 			Alien temp = e[i];
 			
-			if(main.getDeletedAlien().size()>0) {
-				//System.out.println("Hole " + main.getDeletedAlien().size());
-				//main.deleteAlien(i);
-				deleteEnemies(main.getDeletedAlien());
+			if(temp.getIsALive() == false) {
+				showBurst(temp);
+				main.deleteAlien(i);
 			}
-			Platform.runLater(() ->{
-				gcAlien.drawImage(temp.getImg(),temp.getPosX(),temp.getPosY(),temp.getWidth(),
-						temp.getHeight());
-			});
-			
-			
+			else {
+				Platform.runLater(() ->{
+					gcAlien.drawImage(temp.getImg(),temp.getPosX(),temp.getPosY(),temp.getWidth(),
+							temp.getHeight());
+				});
+			}
+		
 		}
 
 	}

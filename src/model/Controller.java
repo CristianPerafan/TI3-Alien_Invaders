@@ -13,7 +13,6 @@ public class Controller {
 	//Attributes
 	private Player player;
 	private ArrayList<Shot> shotsList;
-	private ArrayList<Alien> deletedAlien; 
 	
 	private Alien [] enemiesList;
 	
@@ -22,7 +21,6 @@ public class Controller {
 		super();
 		
 		shotsList = new ArrayList<Shot>();
-		deletedAlien = new ArrayList<Alien>(); 
 		
 		int posX = (WIDTHGAME /2)-20;
 		int posY = HEIGHTGAME-70;
@@ -156,8 +154,6 @@ public class Controller {
 						stop = true;
 						enemiesList[i].switchImage();  
 						enemiesList[i].sleepAlien(false);
-						deletedAlien.add(enemiesList[i]);
-						deleteAlienArray(i);
 					}
 				}
 				
@@ -168,16 +164,6 @@ public class Controller {
 	}
 
 
-
-	public ArrayList<Alien> getDeletedAlien() {
-		return deletedAlien;
-	}
-
-
-
-	public void setDeletedAlien(ArrayList<Alien> deletedAlien) {
-		this.deletedAlien = deletedAlien;
-	}
 	
 	
 	
