@@ -32,8 +32,6 @@ public class GameViewController implements Initializable {
 	private Main main;
 	private Player tempPlayer;
 
-	
-	
 	@FXML
 	private Canvas gameCanvas;
 	@FXML
@@ -71,12 +69,7 @@ public class GameViewController implements Initializable {
 		
 		gcAlien = gameCanvas.getGraphicsContext2D();
 		
-		
-			
-		
 	}
-
-	
 
 	
 	@FXML
@@ -87,11 +80,12 @@ public class GameViewController implements Initializable {
 		startButton.setDisable(true);
 		setUpGame();
 		
-		//validateShot();
 		shot();
 		
 		main.startEnemies();
 		enemies();
+		
+		
 	}
 	
 
@@ -186,6 +180,7 @@ public class GameViewController implements Initializable {
 	private void paintShot(ArrayList<Shot> s){
 		
 		for(int i = 0;i<s.size();i++) {
+			
 			Shot aux = s.get(i);
 			
 			Platform.runLater(() ->{
@@ -212,14 +207,15 @@ public class GameViewController implements Initializable {
 			
 			gc.drawImage(img, p.getPosX(), p.getPoxY(), p.getWidth(), p.getHeight());
 			
-			
 	
 		});
 	}
 	
 	private void clear() {
+
 		gc.clearRect(tempPlayer.getPosX(), tempPlayer.getPoxY(), 
-				tempPlayer.getWidth(),tempPlayer.getHeight());
+					tempPlayer.getWidth(),tempPlayer.getHeight());
+
 	}
 	
 	private void clearShot(ArrayList<Shot> s) {
@@ -238,8 +234,7 @@ public class GameViewController implements Initializable {
 	private void enemies() {
 		new Thread(()-> {
 			while(stopAll == false ) {
-				
-				
+
 				
 				Alien[] enemies = main.getEnemies();
 				
@@ -266,34 +261,29 @@ public class GameViewController implements Initializable {
 	private void clearEnemies(Alien[] e) {
 		for (int i = 0; i < e.length; i++) {
 			Alien temp = e[i];
-			
-			
+	
 			Platform.runLater(() ->{
 				gcAlien.clearRect(temp.getPosX(), temp.getPosY()-temp.getHeight()+10, temp.getWidth(),temp.getHeight());
 			});
-			
-
-			
+		
 		}
 	}
 	
 	private void paintEnemies(Alien[] e) {
 		
 		for (int i = 0; i < e.length; i++) {
+			
 			Alien temp = e[i];
 			
 			Platform.runLater(() ->{
 				gcAlien.drawImage(temp.getImg(),temp.getPosX(),temp.getPosY(),temp.getWidth(),
 						temp.getHeight());
-				
 			});
-		
-		
+			
 		}
-		
+
 	}
-	
-	
+
 
 	private void shot() {
 		new Thread(() ->{

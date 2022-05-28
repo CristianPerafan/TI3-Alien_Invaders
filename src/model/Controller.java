@@ -13,6 +13,7 @@ public class Controller {
 	//Attributes
 	private Player player;
 	private ArrayList<Shot> shotsList;
+	
 	private Alien [] enemiesList;
 	
 	
@@ -34,6 +35,8 @@ public class Controller {
 		setUpEnemies();
 		
 	}
+	
+	
 	
 	private void setUpEnemies() {
 		int posX = 50;
@@ -106,9 +109,12 @@ public class Controller {
 	
 	public void updateShots() {
 		for(int i = 0;i<shotsList.size();i++) {
-			if(shotsList.get(i).getPosY()==0) {
+			
+			if(shotsList.get(i).getPosY()<0) {
 				shotsList.remove(i);
-				
+			}
+			else if(validate(shotsList.get(i))) {
+				shotsList.remove(i);
 			}
 			else {
 				shotsList.get(i).move();
@@ -116,6 +122,33 @@ public class Controller {
 			
 		}
 	}
+	
+	private boolean validate(Shot s) {
+		
+		boolean out = false;
+		
+		boolean stop = false;
+		
+		for(int i = 0;i<enemiesList.length && !stop;i++) {
+			
+			if(s.getPosY() <= enemiesList[i].getPosY()+(enemiesList[i].getHeight()/2)) {
+				if(s.getPosX()>=enemiesList[i].getPosX()-(enemiesList[i].getWidth()/2)) {
+					//!
+					if(s.getPosX()<=enemiesList[i].getPosX()+(enemiesList[i].getWidth())) {
+						out = true;
+						stop = true;
+						enemiesList[i].switchImage();  
+						
+					}
+				}
+				
+			}
+		}
+		
+		return out;
+	}
+	
+	
 	
 
 	

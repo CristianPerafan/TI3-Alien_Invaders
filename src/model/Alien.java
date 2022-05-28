@@ -51,8 +51,8 @@ public class Alien extends Thread{
 		return img;
 	}
 
-	public void setImg(Image img) {
-		this.img = img;
+	public void switchImage() {
+		img = new Image("/media/fire.png");
 	}
 
 	public int getPosX() {

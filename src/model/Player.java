@@ -21,8 +21,8 @@ public class Player {
 		this.posX = posX;
 		this.poxY = poxY;
 		
-		width = 60;
-		height = 60;
+		width = 50;
+		height = 50;
 		
 	}
 	
@@ -32,6 +32,10 @@ public class Player {
 	
 	public Image getImgPlayer() {
 		return imgPlayer;
+	}
+	
+	public void switchImage() {
+		imgPlayer = new Image("/media/fire.png");
 	}
 
 	public int getPosX() {
