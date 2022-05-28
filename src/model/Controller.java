@@ -13,6 +13,7 @@ public class Controller {
 	//Attributes
 	private Player player;
 	private ArrayList<Shot> shotsList;
+	private ArrayList<Alien> deletedAlien; 
 	
 	private Alien [] enemiesList;
 	
@@ -21,7 +22,7 @@ public class Controller {
 		super();
 		
 		shotsList = new ArrayList<Shot>();
-
+		deletedAlien = new ArrayList<Alien>(); 
 		
 		int posX = (WIDTHGAME /2)-20;
 		int posY = HEIGHTGAME-70;
@@ -39,11 +40,11 @@ public class Controller {
 	
 	
 	private void setUpEnemies() {
-		int posX = 50;
+		int posX = 30;
 		int posY = 70;
 		for(int i = 0;i<ENEMIES;i++) {
 			enemiesList[i] = new Alien(posX,posY);
-			posX += 100;
+			posX += 80;
 		}
 	}
 	
@@ -58,7 +59,22 @@ public class Controller {
 		
 		return enemiesList;
 	}
-
+	
+	public void deleteAlienArray(int index) {
+		
+		Alien[] aux = new Alien[enemiesList.length-1]; 
+		
+		int j = 0; 
+		for(int i = 0; i<enemiesList.length;i++) {
+			if(i!=index) {
+				aux[j] = enemiesList[i];
+				j++;
+			}
+		}
+		
+		enemiesList = new Alien[aux.length];
+		enemiesList = aux; 
+	}
 
 	public void addShot(int posX, int posY){
 		
@@ -140,6 +156,8 @@ public class Controller {
 						stop = true;
 						enemiesList[i].switchImage();  
 						enemiesList[i].sleepAlien(false);
+						deletedAlien.add(enemiesList[i]);
+						deleteAlienArray(i);
 					}
 				}
 				
@@ -147,6 +165,18 @@ public class Controller {
 		}
 		
 		return out;
+	}
+
+
+
+	public ArrayList<Alien> getDeletedAlien() {
+		return deletedAlien;
+	}
+
+
+
+	public void setDeletedAlien(ArrayList<Alien> deletedAlien) {
+		this.deletedAlien = deletedAlien;
 	}
 	
 	

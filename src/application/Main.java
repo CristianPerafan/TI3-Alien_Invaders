@@ -107,6 +107,16 @@ public class Main extends Application {
 		launch(args);
 	}
 	
+	public void deleteAlien(int index) {
+		gameController.deleteAlienArray(index);
+	}
+	
+	public ArrayList<Alien> getDeletedAlien(){
+		return gameController.getDeletedAlien();
+	}
+	
+	
+	
 
 
 	
