@@ -55,6 +55,7 @@ public class Controller {
 	
 	
 	public Alien[] getEnemiesList() {
+		
 		return enemiesList;
 	}
 
@@ -138,7 +139,7 @@ public class Controller {
 						out = true;
 						stop = true;
 						enemiesList[i].switchImage();  
-						
+						enemiesList[i].sleepAlien(false);
 					}
 				}
 				

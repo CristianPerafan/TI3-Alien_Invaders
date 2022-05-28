@@ -16,6 +16,7 @@ public class Alien extends Thread{
 	private int width;
 	private int height;
 	private int deltaY;
+	private boolean isAlive;
 	
 	public Alien(int posX, int posY) {
 		img = new Image("/media/alien.png");
@@ -24,6 +25,7 @@ public class Alien extends Thread{
 		width = WIDTH;
 		height = HEIGHT;
 		deltaY = 10;
+		isAlive = true;
 	}
 	
 	@Override
@@ -93,6 +95,17 @@ public class Alien extends Thread{
 
 	public void setDeltaY(int deltaY) {
 		this.deltaY = deltaY;
+	}
+	
+	
+
+	public boolean getIsALive() {
+		return isAlive;
+	}
+	
+	public void sleepAlien(boolean isAlive) {
+		stop = true;
+		this.isAlive = isAlive;
 	}
 
 	@Override

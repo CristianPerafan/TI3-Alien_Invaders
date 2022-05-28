@@ -241,8 +241,7 @@ public class GameViewController implements Initializable {
 				
 				paintEnemies(enemies);
 				
-				
-				
+
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -251,9 +250,7 @@ public class GameViewController implements Initializable {
 				}
 				
 				clearEnemies(enemies);
-				
-				
-				
+
 			}
 		}).start();;
 	}
