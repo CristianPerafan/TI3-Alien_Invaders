@@ -14,11 +14,19 @@ public class RegisterController {
 
     @FXML
     public void startTurn(ActionEvent event) {
-    	System.out.println("Hola");
+    	
+    	String name = namePlayer.getText();
+    	
+    	if(!name.equals("")) {
+    		main.setNamePlayer(name);
+    		main.gameView();
+    	}
+    	
     }
     
     public void setMain(Main main) {
     	this.main = main; 
     }
 
+ 
 }

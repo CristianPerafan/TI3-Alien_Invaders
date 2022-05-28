@@ -11,6 +11,9 @@ public class Player {
 	private int width;
 	private int height;
 	
+	private String name; 
+	private int score; 
+	
 	private int deltaX;
 	
 	public Player(int posX, int poxY) {
@@ -26,10 +29,24 @@ public class Player {
 		
 	}
 	
+	public Player(String name,int score) {
+		this.name = name;
+		this.score = score; 
+	}
+	
+	
 	//
 	// === GETTERS AND SETTERS
 	//
 	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	public Image getImgPlayer() {
 		return imgPlayer;
 	}

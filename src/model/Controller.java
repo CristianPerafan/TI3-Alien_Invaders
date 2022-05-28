@@ -138,6 +138,10 @@ public class Controller {
 		}
 	}
 	
+	public void setPlayerName(String name) {
+		player.setName(name);
+	}
+	
 	private boolean validate(Shot s) {
 		
 		boolean out = false;
