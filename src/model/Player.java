@@ -116,7 +116,7 @@ public class Player {
 
 	@Override
 	public String toString() {
-		return "Player [posX=" + posX + ", poxY=" + poxY + "]";
+		return "Player [Name " + name + ", score" + score + "]";
 	}
 	
 	

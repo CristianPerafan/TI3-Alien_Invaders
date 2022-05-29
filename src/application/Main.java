@@ -180,7 +180,13 @@ public class Main extends Application {
 		launch(args);
 	}
 	
-
+	public void addWinPlayer(Player player, int seconds) {
+		gameController.addWinPlayer(seconds, player);
+	}
+	
+	public ArrayList<Player> listRegisterPlayer(){
+		return gameController.getRegisterPlayers();
+	}
 	
 
 	

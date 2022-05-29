@@ -1,6 +1,8 @@
 package controller;
 
 import java.net.URL;
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -42,6 +44,8 @@ public class GameViewController implements Initializable {
 	
 	private Media sound;
 	
+	private LocalTime first;
+	private LocalTime last; 
 	
 	@SuppressWarnings("unused")
 	private boolean left;
@@ -75,6 +79,8 @@ public class GameViewController implements Initializable {
 	void startGame(ActionEvent e) {
 		
 		tempPlayer = main.getPlayerInformation();
+		
+		first = LocalTime.now();
 		
 		startButton.setDisable(true);
 		setUpGame();
@@ -257,6 +263,18 @@ public class GameViewController implements Initializable {
 					clearEnemies(enemies);
 				}
 				else {
+					
+					if(tempPlayer.isAlive()==true) {
+						
+						last = LocalTime.now();
+						
+						Duration period = Duration.between(first,last);
+						int seconds = (int) period.getSeconds();
+						
+						main.addWinPlayer(tempPlayer, seconds);
+						
+						//main.showMenuView();
+					}
 					System.out.println("Stop");
 					stopAll = true;
 					clearEnemies(enemies);
@@ -264,7 +282,12 @@ public class GameViewController implements Initializable {
 			
 			
 			}
-		}).start();;
+		}).start();
+		
+		if(stopAll==true) {
+			main.showMenuView();
+		}
+		
 	}
 	
 	private void validatePlayerIsAlive() {
@@ -382,6 +405,13 @@ public class GameViewController implements Initializable {
 	
 	public void setMain(Main main) {
 		this.main = main;
+	}
+	
+	public void calculateScore() {
+		
+		
+		
+		
 	}
 
 }
