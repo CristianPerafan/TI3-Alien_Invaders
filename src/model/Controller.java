@@ -1,6 +1,14 @@
 package model;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Controller {
 	
@@ -16,7 +24,7 @@ public class Controller {
 	private Alien [] enemiesList;
 	private boolean allEnemiesDead;
 	private ArrayList<Player> registerPlayers;
- 
+	private File file; 
 	
 	
 	public Controller() {
@@ -24,7 +32,7 @@ public class Controller {
 		
 		shotsList = new ArrayList<Shot>();
 		registerPlayers = new ArrayList<Player>();
-		
+		file = new File(".\\files\\playersData.txt");
 		int posX = (WIDTHGAME /2)-20;
 		int posY = HEIGHTGAME-70;
 		
@@ -257,5 +265,52 @@ public class Controller {
 		
 	}
 	
+	public void serialize() throws IOException {
+		FileOutputStream fos = new FileOutputStream(file);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		
+		oos.writeObject(getRegisterPlayers());
+		
+		oos.close();
+		fos.close();	
+	}
+	
+	public void deserialize() throws IOException, ClassNotFoundException {
+		FileInputStream fis = new FileInputStream(file);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		
+		@SuppressWarnings("unchecked")
+		ArrayList<Player> obj = (ArrayList<Player>)ois.readObject();
+		 registerPlayers.addAll(obj);
+		ois.close();
+		fis.close();
+	}
+	
+	public boolean validatePlayersFile() {
+		
+		if(file.length()==0) {
+			return false; 
+		}else {
+			return true; 
+		}
+	}
+	
+	public void sortScorePlayers() {
+		
+		Collections.sort(registerPlayers,
+				
+				new Comparator<Player>() {
+
+					@Override
+					public int compare(Player c1, Player c2) {
+						
+						int result = c1.getScore()-c2.getScore(); 
+						
+						result*=-1;
+						return result;
+					}
+			
+		});
+	}
 
 }

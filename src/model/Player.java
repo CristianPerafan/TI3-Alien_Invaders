@@ -1,9 +1,15 @@
 package model;
 
+import java.io.Serializable;
+
 import javafx.scene.image.Image;
 
-public class Player {
+public class Player implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	//Attributes
 	private Image imgPlayer;
 	private int posX;

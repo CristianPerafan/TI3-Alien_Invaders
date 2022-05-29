@@ -23,4 +23,9 @@ public class MenuController {
 		main.showScoreView();
 	}
 	
+	 @FXML
+	 public void saveData(ActionEvent event) {
+		main.toSerilize();
+		main.closeProgram();
+	 }
 }
