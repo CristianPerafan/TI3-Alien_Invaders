@@ -8,19 +8,22 @@ public class Controller {
 	static final int HEIGHTGAME = 550;	
 	static final int MOVEMENT = 8;
 	static final int ENEMIES = 9; 
-
+	static final int SCOREBYENEMY = 200;
 	
 	//Attributes
 	private Player player;
 	private ArrayList<Shot> shotsList;
 	private Alien [] enemiesList;
 	private boolean allEnemiesDead;
+	private ArrayList<Player> registerPlayers;
+ 
 	
 	
 	public Controller() {
 		super();
 		
 		shotsList = new ArrayList<Shot>();
+		registerPlayers = new ArrayList<Player>();
 		
 		int posX = (WIDTHGAME /2)-20;
 		int posY = HEIGHTGAME-70;
@@ -39,6 +42,18 @@ public class Controller {
 	
 	
 	
+	public ArrayList<Player> getRegisterPlayers() {
+		return registerPlayers;
+	}
+
+
+
+	public void setRegisterPlayers(ArrayList<Player> registerPlayers) {
+		this.registerPlayers = registerPlayers;
+	}
+
+
+
 	private void setUpEnemies() {
 		int posX = 30;
 		int posY = 70;
@@ -113,6 +128,7 @@ public class Controller {
 						stop = true;
 						enemiesList[i].switchImage();  
 						enemiesList[i].sleepAlien(false);
+						player.setScore(SCOREBYENEMY+player.getScore());
 					}
 				}
 				
@@ -228,7 +244,19 @@ public class Controller {
 		this.allEnemiesDead = allEnemiesDead;
 	}
 	
+	private int calcuateScore(int seconds, Player player) {
+		
+		return player.getScore()-(seconds*10);
+	}
 	
+	public void addWinPlayer(int seconds, Player player) {
+		
+		int finalScore = calcuateScore(seconds,player); 
+		Player obj = new Player(player.getName(),finalScore);
+		
+		registerPlayers.add(obj);
+		System.out.println(obj.toString());
+	}
 	
 	
 

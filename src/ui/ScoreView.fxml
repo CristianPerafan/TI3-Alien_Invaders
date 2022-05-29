@@ -17,13 +17,14 @@
                   <Image url="@../media/PuntajesTitle.png" />
                </image>
             </ImageView>
-            <Button layoutX="268.0" layoutY="343.0" mnemonicParsing="false" onAction="#returnLoginView" text="Regresar" />
+            <Button layoutX="200.0" layoutY="346.0" mnemonicParsing="false" onAction="#returnLoginView" text="Regresar" />
             <TableView fx:id="tablePlayer" layoutX="200.0" layoutY="126.0" prefHeight="200.0" prefWidth="200.0">
               <columns>
                 <TableColumn fx:id="columnName" prefWidth="98.33331298828125" text="Nickname" />
                 <TableColumn fx:id="columnScore" prefWidth="100.0" text="Score" />
               </columns>
             </TableView>
+            <Button layoutX="337.0" layoutY="346.0" mnemonicParsing="false" onAction="#refreshData" text="Refrescar" />
          </children>
       </AnchorPane>
    </center>
