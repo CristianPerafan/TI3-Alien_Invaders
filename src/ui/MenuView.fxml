@@ -15,13 +15,14 @@
                   <Image url="@../media/imageFondo.jpg" />
                </image>
             </ImageView>
-            <Button layoutX="232.0" layoutY="188.0" mnemonicParsing="false" onAction="#startGame" prefHeight="37.0" prefWidth="137.0" text="Jugar" />
-            <Button layoutX="232.0" layoutY="243.0" mnemonicParsing="false" onAction="#lookScores" prefHeight="37.0" prefWidth="137.0" text="Puntajes" />
+            <Button layoutX="232.0" layoutY="178.0" mnemonicParsing="false" onAction="#startGame" prefHeight="37.0" prefWidth="137.0" text="Jugar" />
+            <Button layoutX="232.0" layoutY="230.0" mnemonicParsing="false" onAction="#lookScores" prefHeight="37.0" prefWidth="137.0" text="Puntajes" />
             <ImageView fitHeight="81.0" fitWidth="418.0" layoutX="109.0" layoutY="91.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../media/Space-invaderTitle.png" />
                </image>
             </ImageView>
+            <Button layoutX="232.0" layoutY="281.0" mnemonicParsing="false" onAction="#saveData" prefHeight="37.0" prefWidth="137.0" text="Cerrar y guardar datos" />
          </children>
       </AnchorPane>
    </center>

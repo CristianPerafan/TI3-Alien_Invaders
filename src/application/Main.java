@@ -29,6 +29,11 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			gameController = new Controller();
+			
+			if(gameController.validatePlayersFile()==true) {
+				toDeserilize();
+			}
+			
 			showMenuView();
 			
 		} catch(Exception e) {
@@ -192,9 +197,33 @@ public class Main extends Application {
 		return gameController.getRegisterPlayers();
 	}
 	
-
+	public void toSerilize() {
+		
+		try {
+			gameController.serialize();
+		} catch (IOException e) {
+			System.out.println("");
+			e.printStackTrace();
+		}
+	}
 	
+	public void toDeserilize() {
+		try {
+			gameController.deserialize();
+		} catch (ClassNotFoundException | IOException e) {
+			
+			System.out.println("");
+			e.printStackTrace();
+		}
+	}
 	
+	public void closeProgram() {
+		currentStage.close();
+	}
+	
+	public void sortListPlayers() {
+		gameController.sortScorePlayers();
+	}
 	
 	
 	

@@ -35,7 +35,7 @@ public class ScoreController implements Initializable{
     
     @FXML
     public void returnLoginView(ActionEvent event) {
-
+    	main.showMenuView();
     }
     
     public void setMain(Main main) {
@@ -55,9 +55,11 @@ public class ScoreController implements Initializable{
 	
 	 @FXML
 	  void refreshData(ActionEvent event) {
+		 main.sortListPlayers();
 		 observablePlayers.addAll(main.listRegisterPlayer());
 		 tablePlayer.setItems(observablePlayers);
 
 	  }
-
+	 
+	
 }
