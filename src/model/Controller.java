@@ -13,8 +13,8 @@ public class Controller {
 	//Attributes
 	private Player player;
 	private ArrayList<Shot> shotsList;
-	
 	private Alien [] enemiesList;
+	private boolean allEnemiesDead;
 	
 	
 	public Controller() {
@@ -32,6 +32,8 @@ public class Controller {
 		enemiesList = new Alien[ENEMIES];
 		
 		setUpEnemies();
+		
+		allEnemiesDead = false;
 		
 	}
 	
@@ -53,11 +55,6 @@ public class Controller {
 	}
 	
 	
-	public Alien[] getEnemiesList() {
-		
-		return enemiesList;
-	}
-	
 	public void deleteAlienArray(int index) {
 		
 		Alien[] aux = new Alien[enemiesList.length-1]; 
@@ -78,16 +75,14 @@ public class Controller {
 		
 		Shot temp = new Shot(posX+15,posY-15);
 		shotsList.add(temp);
-	}	
-	//
-	// === GETTERS AND SETTERS
-	//
+	}
 	
 	public void updatePlayer(int id ) {
 		// id = 1 moveRight
 		// id = 2 moveLeft
 		
 		if(id == 1) {
+			
 			
 			if(!(player.getPosX()+player.getWidth()>WIDTHGAME )) {
 				player.moveRight();
@@ -100,49 +95,9 @@ public class Controller {
 			}
 		}
 	}
-
-	public Player getPlayer() {
-		return player;
-	}
-
-
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-
-	public ArrayList<Shot> getShotsList() {
-		return shotsList;
-	}
-
-	public void setShotsList(ArrayList<Shot> shotsList) {
-		this.shotsList = shotsList;
-	}
 	
-	public int getShotsListSize() {
-		return shotsList.size();
-	}
 	
-	public void updateShots() {
-		for(int i = 0;i<shotsList.size();i++) {
-			
-			if(shotsList.get(i).getPosY()<0) {
-				shotsList.remove(i);
-			}
-			else if(validate(shotsList.get(i))) {
-				shotsList.remove(i);
-			}
-			else {
-				shotsList.get(i).move();
-			}
-			
-		}
-	}
-	
-	public void setPlayerName(String name) {
-		player.setName(name);
-	}
-	
-	private boolean validate(Shot s) {
+	private boolean validateCoalitions(Shot s) {
 		
 		boolean out = false;
 		
@@ -167,6 +122,115 @@ public class Controller {
 		return out;
 	}
 
+	
+	public void updateShots() {
+		for(int i = 0;i<shotsList.size();i++) {
+			
+			if(shotsList.get(i).getPosY()<0) {
+				shotsList.remove(i);
+			}
+			else if(validateCoalitions(shotsList.get(i))) {
+				shotsList.remove(i);
+			}
+			else {
+				shotsList.get(i).move();
+			}
+			
+		}
+	}
+	
+	public void validatePlayerIsAlive() {
+		
+		for(int i = 0;i<enemiesList.length;i++) {
+
+			if(enemiesList[i].getPosY()+(enemiesList[i].getHeight()/2)+10 >= player.getPoxY()) {
+			
+				if(enemiesList[i].getPosX() >= (player.getPosX()-(player.getWidth()/2))) {
+					
+					if(enemiesList[i].getPosX()<= (player.getPosX()+(player.getWidth()/2))) {
+						
+						allEnemiesDead = true;
+						stopEnemies();
+						player.setAlive(false);
+						player.switchImage();
+						
+					}
+				}
+			}
+			
+		}
+	}
+	
+	
+	
+	private void stopEnemies() {
+		
+		for(int i = 0;i<enemiesList.length;i++) {
+			enemiesList[i].sleepAlien(false);
+			
+		}
+	}
+	
+	//
+	// === GETTERS AND SETTERS
+	//
+	
+	public Player getPlayer() {
+		return player;
+	}
+
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public ArrayList<Shot> getShotsList() {
+		return shotsList;
+	}
+
+	public void setShotsList(ArrayList<Shot> shotsList) {
+		this.shotsList = shotsList;
+	}
+	
+	public int getShotsListSize() {
+		return shotsList.size();
+	}
+	
+	public void setPlayerName(String name) {
+		player.setName(name);
+	}
+	
+	public Alien[] getEnemiesList() {
+		
+		return enemiesList;
+	}
+
+	public boolean isAllEnemiesDead() {
+		allEnemiesDead = validateEnemiesAreDead();
+		return allEnemiesDead;
+	}
+	
+	private boolean validateEnemiesAreDead() {
+		
+		boolean out = true;
+		boolean stop = false;
+		for(int i = 0;i<enemiesList.length && !stop;i++) {
+			if(enemiesList[i].getIsALive() == true) {
+				out = false;
+				stop = true;
+			}
+		}
+		
+		return out;
+	}
+
+	public void setAllEnemiesDead(boolean allEnemiesDead) {
+		this.allEnemiesDead = allEnemiesDead;
+	}
+	
+	
+	
+	
 
 	
 	

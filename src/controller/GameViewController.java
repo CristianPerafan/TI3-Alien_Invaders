@@ -105,7 +105,6 @@ public class GameViewController implements Initializable {
 			main.addShot(tempPlayer.getPosX(),tempPlayer.getPoxY());
 			soundShot();
 
-
 		}
 	
 		
@@ -117,8 +116,6 @@ public class GameViewController implements Initializable {
 		new Thread(()->{
 			Platform.runLater(() ->{
 				
-				
-				
 				tempPlayer = main.getPlayerInformation();
 				
 				clear();
@@ -126,7 +123,7 @@ public class GameViewController implements Initializable {
 				//Move left
 				uptadePlayer(1);
 				
-				paint();
+				paintPlayer();
 
 			});
 		}).start();
@@ -138,16 +135,12 @@ public class GameViewController implements Initializable {
 
 			Platform.runLater(() ->{
 				
-				
-		
 				tempPlayer = main.getPlayerInformation();
-				
 				clear();
-				
 				//Move left
 				uptadePlayer(2);
 				
-				paint();
+				paintPlayer();
 
 			});
 
@@ -167,11 +160,8 @@ public class GameViewController implements Initializable {
 		
 		Image img = p.getImgPlayer();
 		
-		
-		
 		gc.drawImage(img, p.getPosX(), p.getPoxY(), p.getWidth(), p.getHeight());
-	
-		
+
 	}
 	
 
@@ -192,17 +182,13 @@ public class GameViewController implements Initializable {
 
 	}
 	
-	private void paint() {
+	private void paintPlayer() {
 	
 		Platform.runLater(()->{
-			
-		
 			
 			Player p = main.getPlayerInformation();
 			
 			Image img = p.getImgPlayer();
-			
-			
 			
 			gc.drawImage(img, p.getPosX(), p.getPoxY(), p.getWidth(), p.getHeight());
 			
@@ -237,21 +223,41 @@ public class GameViewController implements Initializable {
 				
 				Alien[] enemies = main.getEnemies();
 				
-				paintEnemies(enemies);
 				
+				
+				validatePlayerIsAlive();
+				
+					
+				if(main.validaEnemiesAreDead() == false) {
+					
+					paintEnemies(enemies);
+					
 
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+						
+					clearEnemies(enemies);
 				}
-				
-				clearEnemies(enemies);
-
+				else {
+					System.out.println("PARO TODO");
+					stopAll = true;
+					clearEnemies(enemies);
+				}
+			
+			
 			}
 		}).start();;
 	}
+	
+	private void validatePlayerIsAlive() {
+		main.validatePlayerIsAlive();
+	}
+	
+	
 	
 	private void clearEnemies(Alien[] e) {
 		
@@ -259,7 +265,8 @@ public class GameViewController implements Initializable {
 			Alien temp = e[i];
 	
 			Platform.runLater(() ->{
-				gcAlien.clearRect(temp.getPosX(), temp.getPosY()-temp.getHeight()+10, temp.getWidth(),temp.getHeight());
+				gcAlien.clearRect(temp.getPosX(), temp.getPosY()-temp.getDeltaY(), 
+						temp.getWidth(),temp.getHeight());
 			});
 		
 		}
@@ -349,13 +356,14 @@ public class GameViewController implements Initializable {
 	}
 	
 
+	
+
 	private void soundShot() {
-		
+
 		MediaPlayer player = new MediaPlayer(sound);
 		
 		player.play();
-		
-	
+
 	}
 	
 	public void setMain(Main main) {

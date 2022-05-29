@@ -43,6 +43,8 @@ public class Main extends Application {
 	
 		try {
 			
+			currentStage.close();
+			
 			FXMLLoader loader_GV = new FXMLLoader(getClass().getResource("../ui/GameView.fxml"));
 			
 			BorderPane root_GV = (BorderPane)loader_GV.load();
@@ -69,49 +71,6 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		 
-	}
-	
-	public Player getPlayerInformation() {
-		
-		return gameController.getPlayer();
-		
-	}
-	
-	public void setPlayer(int id) {
-		gameController.updatePlayer(id);
-	}
-	
-	public void addShot(int posX, int posY) {
-		gameController.addShot(posX, posY);
-	}
-	
-	public void updateShots() {
-		gameController.updateShots();
-	}
-	
-	public void startEnemies() {
-		gameController.startEnemies();
-	}
-	
-
-
-	
-	
-	public ArrayList<Shot> getShotList(){
-		return gameController.getShotsList();
-	}
-	
-	
-	public Alien[] getEnemies() {
-		return gameController.getEnemiesList();
-	}
-	
-	public void deleteAlien(int index) {
-		gameController.deleteAlienArray(index);
-	}
-	
-	public static void main(String[] args) {
-		launch(args);
 	}
 	
 	public void showMenuView() {
@@ -170,9 +129,59 @@ public class Main extends Application {
 		}
 	}
 	
+	public Player getPlayerInformation() {
+		
+		return gameController.getPlayer();
+		
+	}
+	
+	public void setPlayer(int id) {
+		gameController.updatePlayer(id);
+	}
+	
+	public void addShot(int posX, int posY) {
+		gameController.addShot(posX, posY);
+	}
+	
+	public void updateShots() {
+		gameController.updateShots();
+	}
+	
+	public void startEnemies() {
+		gameController.startEnemies();
+	}
+	
+
+	public ArrayList<Shot> getShotList(){
+		return gameController.getShotsList();
+	}
+	
+	public Alien[] getEnemies() {
+		return gameController.getEnemiesList();
+	}
+	
+	public void deleteAlien(int index) {
+		gameController.deleteAlienArray(index);
+	}
+	
 	public void setNamePlayer(String name) {
 		gameController.setPlayerName(name);
 	}
+	
+	public void validatePlayerIsAlive() {
+		gameController.validatePlayerIsAlive();
+	}
+	
+	public boolean validaEnemiesAreDead() {
+		return gameController.isAllEnemiesDead();
+	}
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+	
+
+	
 
 	
 	

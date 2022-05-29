@@ -10,11 +10,11 @@ public class Player {
 	private int poxY;
 	private int width;
 	private int height;
-	
+	private int deltaX;
 	private String name; 
 	private int score; 
+	private boolean isAlive;
 	
-	private int deltaX;
 	
 	public Player(int posX, int poxY) {
 		super();
@@ -27,6 +27,8 @@ public class Player {
 		width = 50;
 		height = 50;
 		
+		score = 0;
+		isAlive = true;
 	}
 	
 	public Player(String name,int score) {
@@ -34,6 +36,9 @@ public class Player {
 		this.score = score; 
 	}
 	
+	public void switchImage() {
+		imgPlayer = new Image("/media/fire.png");
+	}
 	
 	//
 	// === GETTERS AND SETTERS
@@ -49,10 +54,6 @@ public class Player {
 
 	public Image getImgPlayer() {
 		return imgPlayer;
-	}
-	
-	public void switchImage() {
-		imgPlayer = new Image("/media/fire.png");
 	}
 
 	public int getPosX() {
@@ -97,8 +98,21 @@ public class Player {
 		posX -= deltaX;
 	}
 	
-	
-	
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public boolean isAlive() {
+		return isAlive;
+	}
+
+	public void setAlive(boolean isAlive) {
+		this.isAlive = isAlive;
+	}
 
 	@Override
 	public String toString() {
