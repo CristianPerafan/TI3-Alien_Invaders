@@ -83,8 +83,7 @@ public class GameViewController implements Initializable {
 		
 		main.startEnemies();
 		enemies();
-		
-		
+
 	}
 	
 
@@ -113,40 +112,39 @@ public class GameViewController implements Initializable {
 	
 	
 	private void moveRight() {
+		
 		new Thread(()->{
-			Platform.runLater(() ->{
+			
+			clear(1);
+			
+			tempPlayer = main.getPlayerInformation();
+			
+			//Move right
+			uptadePlayer(1);
 				
-				tempPlayer = main.getPlayerInformation();
-				
-				clear();
-				
-				//Move left
-				uptadePlayer(1);
-				
-				paintPlayer();
+			paintPlayer();
+			
 
-			});
+			
 		}).start();
+		
 	}
 	
 	private void moveLeft() {
 	
 		new Thread(()->{
 
-			Platform.runLater(() ->{
+			clear(2);
 				
-				tempPlayer = main.getPlayerInformation();
-				clear();
-				//Move left
-				uptadePlayer(2);
+			tempPlayer = main.getPlayerInformation();
+			
+			//Move left
+			uptadePlayer(2);
 				
-				paintPlayer();
-
-			});
-
+			paintPlayer();
 
 			
-		}).start();;
+		}).start();
 		
 	}
 	
@@ -192,14 +190,30 @@ public class GameViewController implements Initializable {
 			
 			gc.drawImage(img, p.getPosX(), p.getPoxY(), p.getWidth(), p.getHeight());
 			
-	
 		});
 	}
 	
-	private void clear() {
-
-		gc.clearRect(tempPlayer.getPosX(), tempPlayer.getPoxY(), 
-					tempPlayer.getWidth(),tempPlayer.getHeight());
+	private void clear(int id) {
+		
+		//id = 1 -> right
+		//id = 2 -> left
+	
+		
+		Platform.runLater(() ->{
+			
+			int delX = tempPlayer.getDeltaX();
+		
+			if(id == 2) {
+				gc.clearRect(tempPlayer.getPosX()+(delX), tempPlayer.getPoxY(), 
+						tempPlayer.getWidth(),tempPlayer.getHeight());
+			}
+			else {
+				gc.clearRect(tempPlayer.getPosX()-(delX), tempPlayer.getPoxY(), 
+						tempPlayer.getWidth(),tempPlayer.getHeight());
+			}
+			
+		});
+		
 
 	}
 	
@@ -243,7 +257,7 @@ public class GameViewController implements Initializable {
 					clearEnemies(enemies);
 				}
 				else {
-					System.out.println("PARO TODO");
+					System.out.println("Stop");
 					stopAll = true;
 					clearEnemies(enemies);
 				}
