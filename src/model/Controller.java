@@ -253,27 +253,9 @@ public class Controller {
 		
 		int finalScore = calcuateScore(seconds,player); 
 		Player obj = new Player(player.getName(),finalScore);
-		
 		registerPlayers.add(obj);
-		System.out.println(obj.toString());
+		
 	}
 	
-	
-
-	
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-		
 
 }

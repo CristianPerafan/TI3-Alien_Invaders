@@ -21,7 +21,6 @@ import model.Shot;
 
 public class Main extends Application {
 	//Attributes
-	@SuppressWarnings("unused")
 	private Stage currentStage;
 	private Controller gameController;
 	
@@ -31,7 +30,6 @@ public class Main extends Application {
 		try {
 			gameController = new Controller();
 			showMenuView();
-			//gameView();
 			
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -113,6 +111,7 @@ public class Main extends Application {
 	
 	public void showScoreView() {
 		try {
+			currentStage.close();
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/ScoreView.fxml"));
 			BorderPane root;
 			root = (BorderPane)loader.load();

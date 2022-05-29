@@ -273,9 +273,9 @@ public class GameViewController implements Initializable {
 						
 						main.addWinPlayer(tempPlayer, seconds);
 						
-						//main.showMenuView();
+						finishGame();
+	
 					}
-					System.out.println("Stop");
 					stopAll = true;
 					clearEnemies(enemies);
 				}
@@ -284,10 +284,14 @@ public class GameViewController implements Initializable {
 			}
 		}).start();
 		
-		if(stopAll==true) {
-			main.showMenuView();
-		}
 		
+	}
+	
+	private void finishGame() {
+		Platform.runLater(() ->{
+			main.showScoreView();
+			
+		});
 	}
 	
 	private void validatePlayerIsAlive() {
@@ -407,11 +411,6 @@ public class GameViewController implements Initializable {
 		this.main = main;
 	}
 	
-	public void calculateScore() {
-		
-		
-		
-		
-	}
+
 
 }
