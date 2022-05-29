@@ -16,7 +16,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
@@ -37,12 +39,20 @@ public class GameViewController implements Initializable {
 	private Canvas gameCanvas;
 	@FXML
 	private Button startButton;
+	@FXML
+	private Label scoreLabel;
+	@FXML
+	private ImageView winMessage;
+	@FXML
+	private ImageView gameOverImage;
 	
 	private GraphicsContext gc;
 	private GraphicsContext gcShot;
 	private GraphicsContext gcAlien;
 	
 	private Media sound;
+	private Media victorySound;
+	private Media gameOverSound;
 	
 	private LocalTime first;
 	private LocalTime last; 
@@ -55,14 +65,20 @@ public class GameViewController implements Initializable {
 	private boolean space;
 	
 	private volatile boolean stopAll = false;
+	
 
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
 		String relativePath = "/media/spaceGun.mp3";
-		
 		sound = new Media(getClass().getResource(relativePath).toExternalForm());
+		
+		String relativePathV = "/media/victoria.mp3";
+		victorySound = new Media(getClass().getResource(relativePathV).toExternalForm());
+		
+		String relativePathL = "/media/gameOver.mp3";
+		gameOverSound = new Media(getClass().getResource(relativePathL).toExternalForm());
 
 		gameCanvas.setFocusTraversable(true);
 		
@@ -109,7 +125,7 @@ public class GameViewController implements Initializable {
 	
 			main.addShot(tempPlayer.getPosX(),tempPlayer.getPoxY());
 			soundShot();
-
+			
 		}
 	
 		
@@ -130,7 +146,6 @@ public class GameViewController implements Initializable {
 				
 			paintPlayer();
 			
-
 			
 		}).start();
 		
@@ -266,6 +281,8 @@ public class GameViewController implements Initializable {
 					
 					if(tempPlayer.isAlive()==true) {
 						
+						System.out.println("Final");
+						
 						last = LocalTime.now();
 						
 						Duration period = Duration.between(first,last);
@@ -273,11 +290,20 @@ public class GameViewController implements Initializable {
 						
 						main.addWinPlayer(tempPlayer, seconds);
 						
-						finishGame();
+						finishGameByWin();
+						
 	
+					}
+					else {
+						clear(1);
+						clear(2);
+						paintPlayer();
+						finishGameByLost();
+						
 					}
 					stopAll = true;
 					clearEnemies(enemies);
+					
 				}
 			
 			
@@ -287,19 +313,65 @@ public class GameViewController implements Initializable {
 		
 	}
 	
-	private void finishGame() {
-		Platform.runLater(() ->{
-			main.showScoreView();
+	private void finishGameByLost() {
+		new Thread(()->{
 			
-		});
+			clear(1);
+			paintPlayer();
+			
+			Platform.runLater(() ->{
+				gameOverImage.setVisible(true);
+			});
+			
+			sounGameOver();
+			
+			try {
+				Thread.sleep(6000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Platform.runLater(() ->{
+				main.showMenuView();
+				
+			});
+			
+		}).start();
+	}
+	
+	private void finishGameByWin() {
+		new Thread(()->{
+			
+			Platform.runLater(() ->{
+				winMessage.setVisible(true);
+			});
+			
+			soundVictory();
+			
+			try {
+				Thread.sleep(6000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			Platform.runLater(() ->{
+				main.showScoreView();
+				
+			});
+			
+		}).start();
+		
 	}
 	
 	private void validatePlayerIsAlive() {
 		main.validatePlayerIsAlive();
 	}
 	
+
 	
-	
+
 	private void clearEnemies(Alien[] e) {
 		
 		for (int i = 0; i < e.length; i++) {
@@ -389,13 +461,20 @@ public class GameViewController implements Initializable {
 						temp = main.getShotList();
 						
 					}
-
+					
+					
 				}
 
 			
 		}).start();
 	}
 	
+	private void updateScore() {
+		Platform.runLater(()->{
+			scoreLabel.setText(String.valueOf(tempPlayer.getScore()));
+		});
+	
+	}
 
 	
 
@@ -404,7 +483,21 @@ public class GameViewController implements Initializable {
 		MediaPlayer player = new MediaPlayer(sound);
 		
 		player.play();
+		
+		updateScore();
 
+	}
+	
+	private void soundVictory() {
+		MediaPlayer player = new MediaPlayer(victorySound);
+		
+		player.play();
+	}
+	
+	private void sounGameOver() {
+		MediaPlayer player = new MediaPlayer(gameOverSound);
+		
+		player.play();
 	}
 	
 	public void setMain(Main main) {

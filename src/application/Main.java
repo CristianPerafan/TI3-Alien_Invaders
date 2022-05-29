@@ -73,6 +73,11 @@ public class Main extends Application {
 	
 	public void showMenuView() {
 		try {
+			
+			if(currentStage != null) {
+				currentStage.close();
+			}
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/MenuView.fxml"));
 			BorderPane root;
 			root = (BorderPane)loader.load();
