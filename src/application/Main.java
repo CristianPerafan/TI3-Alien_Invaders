@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import model.Alien;
 import model.Controller;
+import model.FinalBoss;
 import model.Player;
 import model.Shot;
 
@@ -29,8 +30,11 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			gameController = new Controller();
 			
-			toInitalizeController(0);
+			if(gameController.validatePlayersFile()==true) {
+				toDeserilize();
+			}
 			
 			showMenuView();
 			
@@ -40,11 +44,8 @@ public class Main extends Application {
 	}
 	
 	public void toInitalizeController(int level) {
-		gameController = new Controller(level);
+		gameController.setUpGameForLevel(level);
 		
-		if(gameController.validatePlayersFile()==true) {
-			toDeserilize();
-		}
 	}
 	
 	public void gameView() {
@@ -214,6 +215,10 @@ public class Main extends Application {
 		return gameController.isAllEnemiesDead();
 	}
 	
+	public void validatePlayerIsLiving() {
+		gameController.validatePlayerIsALiveByBoss();
+	}
+	
 	public void addAEnemyShot() {
 		gameController.addEnemyShot();
 	}
@@ -266,12 +271,20 @@ public class Main extends Application {
 		gameController.sortScorePlayers();
 	}
 	
-	public void setUpFinaBoss() {
+	public void setUpFinalBoss() {
 		gameController.setUpFinalBoss();
 	}
 	
 	public int getNumLevel() {
 		return gameController.getNumLevel();
+	}
+	
+	public FinalBoss getFinalBoss() {
+		return gameController.getBoss();
+	}
+	
+	public void resetFinalBoss() {
+		gameController.resetBoss();
 	}
 	
 	public static void main(String[] args) {

@@ -24,6 +24,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import model.Alien;
+import model.FinalBoss;
 import model.Player;
 import model.Shot;
 
@@ -50,6 +51,7 @@ public class GameViewController implements Initializable {
 	private GraphicsContext gcShot;
 	private GraphicsContext gcEnemyShot;
 	private GraphicsContext gcAlien;
+	private GraphicsContext gcBoss;
 	
 	private Media sound;
 	private Media victorySound;
@@ -68,6 +70,7 @@ public class GameViewController implements Initializable {
 	private volatile boolean stopAll = false;
 	private volatile boolean canShot = true;
 	private volatile boolean stopBoss = false;
+	private volatile boolean stopShot = false;
 
 
 	@Override
@@ -91,6 +94,8 @@ public class GameViewController implements Initializable {
 		gcEnemyShot = gameCanvas.getGraphicsContext2D();
 		
 		gcAlien = gameCanvas.getGraphicsContext2D();
+		
+		gcBoss = gameCanvas.getGraphicsContext2D();
 		
 	}
 
@@ -138,11 +143,23 @@ public class GameViewController implements Initializable {
 		else if(e.getCode() == KeyCode.SPACE) {
 			
 			if(canShot == true) {
+			
 				if(tempPlayer.isAlive() == true) {
-					main.addAEnemyShot();
-					main.addShotPlayer(tempPlayer.getPosX(),tempPlayer.getPoxY(),1);
-					soundShot();
-					validateCanShot();
+					if(main.getFinalBoss() != null) {
+					
+						main.addShotPlayer(tempPlayer.getPosX(),tempPlayer.getPoxY(),1);
+						soundShot();
+					
+						
+						
+					}else {
+						main.addAEnemyShot();
+						main.addShotPlayer(tempPlayer.getPosX(),tempPlayer.getPoxY(),1);
+						soundShot();
+						validateCanShot();
+					}
+					
+				
 				}
 			}
 			
@@ -337,15 +354,12 @@ public class GameViewController implements Initializable {
 						
 						if(main.getNumLevel() == 3) {
 							
-							last = LocalTime.now();
+							main.setUpFinalBoss();
 							
-							Duration period = Duration.between(first,last);
-							int seconds = (int) period.getSeconds();
 							
-							main.addWinPlayer(tempPlayer, seconds);
-							
-							finishGameByWin();
-							
+							FinallBoss();
+							shot();
+
 						}
 						else {
 							
@@ -369,9 +383,21 @@ public class GameViewController implements Initializable {
 						paintPlayer();
 						finishGameByLost();
 						
+					
+						
 					}
+					
+					
 					stopAll = true;
+					stopShot = true;
+					
+					
+					
+					
+					
+					
 					clearEnemies(enemies);
+					
 					
 				}
 			
@@ -381,6 +407,78 @@ public class GameViewController implements Initializable {
 		
 		
 	}
+
+	private void FinallBoss() {
+		new Thread(()-> {	
+			
+			
+			while(stopBoss == false) {
+				
+				FinalBoss boss = main.getFinalBoss();
+				
+				main.validatePlayerIsLiving();
+				
+				if(boss.getIsAlive() == true) {
+					paintFinalBoss(boss);
+					
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					clearFinalBoss(boss);
+				}
+				else {
+					
+					if(tempPlayer.isAlive() == false) {
+						finishGameByLost();
+						
+					}
+					else {
+						
+						last = LocalTime.now();
+						
+						Duration period = Duration.between(first,last);
+						int seconds = (int) period.getSeconds();
+						
+						main.addWinPlayer(tempPlayer, seconds);
+						
+						main.resetFinalBoss();
+						finishGameByWin();
+					}
+					
+					stopBoss = true;
+					stopAll = true;
+					stopShot = true;
+				}
+				
+			
+				
+				
+			}
+			
+			
+		}).start();
+	}
+	
+	private void clearFinalBoss(FinalBoss b) {
+		Platform.runLater(()->{
+			
+			gc.clearRect(b.getPosX(), b.getPosY()-(b.getDeltaY()*2),
+					b.getWidth(), b.getHeight());
+			
+		
+		});
+	}
+
+	private void paintFinalBoss(FinalBoss b) {
+		Platform.runLater(()->{
+			gcBoss.drawImage(b.getImg(), b.getPosX(), b.getPosY(),b.getWidth(),b.getHeight());
+		});
+	}
+	
 	
 	private void finishGameByLost() {
 		new Thread(()->{
@@ -531,25 +629,13 @@ public class GameViewController implements Initializable {
 				
 		}).start();
 	}
-	
-	@SuppressWarnings("unused")
-	private void FinallBoss() {
-		new Thread(()-> {
-			
-			while(stopBoss == false) {
-				
-			}
-			
-			
-		}).start();
-	}
-	
+
 
 
 	private void shot() {
 		new Thread(() ->{
-
-				while(stopAll == false) {
+			    stopShot = false;
+				while(stopShot == false) {
 					
 					ArrayList<Shot> temp = main.getShotList();
 					

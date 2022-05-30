@@ -6,10 +6,12 @@ public class FinalBoss extends Thread {
 	
 	private volatile boolean stop = false;
 	
-	static final int WIDTH = 80;  
-	static final int HEIGHT = 80;	
+	static final int WIDTH =  100;  
+	static final int HEIGHT = 100;
+	static final int LIFE = 100;
 	
 	//Attribute
+	private int life;
 	private Image img;
 	private int posX;
 	private int posY;
@@ -18,9 +20,12 @@ public class FinalBoss extends Thread {
 	private int deltaY;
 	private boolean isAlive;
 	
+
 	
 	
-	public FinalBoss(int posX, int posY) {
+	public FinalBoss(int posX, int posY, int w, int h) {
+		
+		life = LIFE;
 		
 		img = new Image("/media/boss.png");
 		
@@ -31,8 +36,10 @@ public class FinalBoss extends Thread {
 		height = HEIGHT;
 		
 		deltaY = 10;
+	
 		
 		isAlive = true;
+		
 		
 	}
 	
@@ -42,7 +49,7 @@ public class FinalBoss extends Thread {
 			posY += deltaY;
 			
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -52,10 +59,33 @@ public class FinalBoss extends Thread {
 		}
 	}
 	
+	public void sleepBoss(boolean isAlive) {
+		stop = true;
+		this.isAlive = isAlive;
+	}
+	
+	public void switchImage() {
+		img = new Image("/media/fire.png");
+	}
+	
 	//
 	// GETTERS AND SETTERS
 	//
 	
+	public void lessLife() {
+		life -= 10;
+	}
+	
+	
+	
+
+	public int getLife() {
+		return life;
+	}
+
+	public void setLife(int life) {
+		this.life = life;
+	}
 
 	public boolean isStop() {
 		return stop;

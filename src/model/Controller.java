@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
+
 
 public class Controller {
 	
@@ -17,9 +17,11 @@ public class Controller {
 	static final int HEIGHTGAME = 550;	
 	static final int MOVEMENT = 8;
 	static final int SCOREBYENEMY = 200;
+	static final int SCOREBYBOSS = 500;
 	static final int ALIEN_MOVEMENT_L1 = 5;
 	static final int ALIEN_MOVEMENT_L2 = 8;
 	static final int ALIEN_MOVEMENT_L3 = 10;
+	
 	
 	//Attributes
 	private int timeSecondsShotEnemies;
@@ -36,14 +38,20 @@ public class Controller {
 	private FinalBoss boss;
 	
 	
-	public Controller(int level) {
+	public Controller() {
 		super();
 		
-		shotsList = new ArrayList<Shot>();
-		shotsEnemiesList = new ArrayList<Shot>();
-		
+				
 		registerPlayers = new ArrayList<Player>();
 		file = new File(".\\files\\playersData.txt");
+		
+		
+
+	}
+	
+	private void setUpGame() {
+		shotsList = new ArrayList<Shot>();
+		shotsEnemiesList = new ArrayList<Shot>();
 		int posX = (WIDTHGAME /2)-20;
 		int posY = HEIGHTGAME-70;
 		
@@ -51,17 +59,18 @@ public class Controller {
 		
 		player.setDeltaX(MOVEMENT);
 		
-		if(level != 0) {
-			setUpGameForLevel(level);
-		}
 		
 		allEnemiesDead = false;
-		
-
 	}
 	
-	private void setUpGameForLevel(int level) {
+	public void resetBoss() {
+		boss = null;
+	}
+	
+	public void setUpGameForLevel(int level) {
 		if(level == 1) {
+			setUpGame();
+
 			
 			numLevel = 1;
 			
@@ -74,6 +83,9 @@ public class Controller {
 		}
 		else if(level == 2) {
 			
+			setUpGame();
+
+			
 			numLevel = 2;
 			
 			numEnemies = 9;
@@ -84,6 +96,9 @@ public class Controller {
 			
 		}
 		else if(level == 3) {
+			
+			setUpGame();
+
 			
 			numLevel = 3;
 			
@@ -216,6 +231,40 @@ public class Controller {
 		
 		return out;
 	}
+	
+	private boolean validateBossCoalition(Shot s) {
+		
+		boolean out = false;
+		
+		if(boss != null) {
+			if(s.getPosY()<=boss.getPosY()+(boss.getHeight()/2)) {
+				
+				if(s.getPosX() >= boss.getPosX()-(boss.getWidth()/2)) {
+					
+					//!
+					if(s.getPosX() <= boss.getPosX()+(boss.getWidth())) {
+						out = true;
+						
+						
+						boss.lessLife();
+						
+						if(boss.getLife() == 0) {
+							boss.sleepBoss(false);
+							player.setScore(player.getScore()+SCOREBYBOSS);
+							boss.switchImage();
+						}
+						
+						
+					
+					}
+				}
+			}
+		}
+		
+		
+		
+		return out;
+	}
 
 	
 	public void updateShots() {
@@ -224,12 +273,18 @@ public class Controller {
 			if(shotsList.get(i).getPosY()<0) {
 				shotsList.remove(i);
 			}
+			else if(validateBossCoalition(shotsList.get(i))) {
+			
+				shotsList.remove(i);
+			}
 			else if(validateCoalitions(shotsList.get(i))) {
 				shotsList.remove(i);
 			}
 			else {
 				shotsList.get(i).moveUp();
 			}
+			
+			
 			
 		}
 	}
@@ -258,6 +313,22 @@ public class Controller {
 		}
 	}
 	
+	public void validatePlayerIsALiveByBoss() {
+		if(boss.getPosY()+(boss.getHeight()/2)>=player.getPoxY()) {
+			
+			if(boss.getPosX() >= (player.getPosX()-(player.getWidth()/2))) {
+				
+				if(boss.getPosX() <= (player.getPosX()+(player.getWidth()/2))) {
+					
+					player.setAlive(false);
+					player.switchImage();
+					stopBoss();
+					
+				}
+			}
+		}
+	}
+	
 	
 	
 	private void stopEnemies() {
@@ -266,6 +337,11 @@ public class Controller {
 			enemiesList[i].sleepAlien(false);
 			
 		}
+	}
+	
+	private void stopBoss() {
+		boss.sleepBoss(false);
+		
 	}
 	
 	private boolean validateEnemiesAreDead() {
@@ -351,7 +427,7 @@ public class Controller {
 			int posY = enemiesList[index].getPosY();
 			
 			
-			Shot s = new Shot(posX,posY+10,2);
+			Shot s = new Shot(posX,posY+20,2);
 			
 			shotsEnemiesList.add(s);
 		}
@@ -367,8 +443,14 @@ public class Controller {
 		int posX = (WIDTHGAME /2)-20;
 		int posY = 120;
 		
-		boss = new FinalBoss(posX, posY);
+		boss = new FinalBoss(posX, posY,WIDTHGAME,HEIGHTGAME);
 		
+		toStarFinalBoss();
+		
+	}
+	
+	private void toStarFinalBoss() {
+		boss.start();
 	}
 	
 	public void serialize() throws IOException {
