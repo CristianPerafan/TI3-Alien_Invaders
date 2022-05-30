@@ -30,7 +30,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			
-			toInitalizeController();
+			toInitalizeController(0);
 			
 			showMenuView();
 			
@@ -39,8 +39,8 @@ public class Main extends Application {
 		}
 	}
 	
-	private void toInitalizeController() {
-		gameController = new Controller();
+	public void toInitalizeController(int level) {
+		gameController = new Controller(level);
 		
 		if(gameController.validatePlayersFile()==true) {
 			toDeserilize();
@@ -109,8 +109,6 @@ public class Main extends Application {
 	public void showRegisterView() {
 		try {
 			currentStage.close();
-			
-			toInitalizeController();
 			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/RegisterView.fxml"));
 			BorderPane root;

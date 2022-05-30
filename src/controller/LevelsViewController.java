@@ -21,16 +21,19 @@ public class LevelsViewController implements Initializable{
 	
 	@FXML
 	void level_one(ActionEvent e) {
+		main.toInitalizeController(1);
 		main.showRegisterView();
 	}
 	
 	@FXML
 	void level_two(ActionEvent e) {
+		main.toInitalizeController(2);
 		main.showRegisterView();
 	}
 	
 	@FXML
 	void level_three(ActionEvent e) {
+		main.toInitalizeController(3);
 		main.showRegisterView();
 	}
 	

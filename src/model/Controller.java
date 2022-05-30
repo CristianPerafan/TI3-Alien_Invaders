@@ -15,25 +15,26 @@ public class Controller {
 	static final int WIDTHGAME = 750;  
 	static final int HEIGHTGAME = 550;	
 	static final int MOVEMENT = 8;
-	static final int ENEMIES = 9; 
 	static final int SCOREBYENEMY = 200;
-	static final int TIMESECONDSHOTENEMIES = 5;
+	static final int ALIEN_MOVEMENT_L1 = 5;
+	static final int ALIEN_MOVEMENT_L2 = 8;
+	static final int ALIEN_MOVEMENT_L3 = 10;
 	
 	//Attributes
 	private int timeSecondsShotEnemies;
+	private int numEnemies;
+	private int numLevel;
+	private boolean allEnemiesDead;
 	private Player player;
 	private ArrayList<Shot> shotsList;
 	private ArrayList<Shot> shotsEnemiesList;
 	private Alien [] enemiesList;
-	private boolean allEnemiesDead;
 	private ArrayList<Player> registerPlayers;
 	private File file; 
 	
 	
-	public Controller() {
+	public Controller(int level) {
 		super();
-		
-		timeSecondsShotEnemies = TIMESECONDSHOTENEMIES;
 		
 		shotsList = new ArrayList<Shot>();
 		shotsEnemiesList = new ArrayList<Shot>();
@@ -47,15 +48,49 @@ public class Controller {
 		
 		player.setDeltaX(MOVEMENT);
 		
-		enemiesList = new Alien[ENEMIES];
-		
-		setUpEnemies();
+		if(level != 0) {
+			setUpGameForLevel(level);
+		}
 		
 		allEnemiesDead = false;
 		
+
 	}
 	
-	
+	private void setUpGameForLevel(int level) {
+		if(level == 1) {
+			
+			numLevel = 1;
+			
+			numEnemies = 3;
+
+			enemiesList = new Alien[numEnemies];
+			
+			setUpEnemies(level);
+			
+		}
+		else if(level == 2) {
+			
+			numLevel = 2;
+			
+			numEnemies = 9;
+			
+			enemiesList = new Alien[numEnemies];
+			
+			setUpEnemies(level);
+			
+		}
+		else if(level == 3) {
+			
+			numLevel = 3;
+			
+			numEnemies = 9;
+			
+			enemiesList = new Alien[numEnemies];
+			
+			setUpEnemies(level);
+		}
+	}
 	
 	public ArrayList<Player> getRegisterPlayers() {
 		return registerPlayers;
@@ -69,17 +104,43 @@ public class Controller {
 
 
 
-	private void setUpEnemies() {
-		int posX = 30;
-		int posY = 70;
-		for(int i = 0;i<ENEMIES;i++) {
-			enemiesList[i] = new Alien(posX,posY);
-			posX += 80;
+	private void setUpEnemies(int level) {
+		if(level == 1) {
+			
+			
+			int posX = 100;
+			int posY = 70;
+			for(int i = 0;i<numEnemies;i++) {
+				enemiesList[i] = new Alien(posX,posY,ALIEN_MOVEMENT_L1);
+				posX += 260;
+			}
+			
 		}
+		else if(level == 2) {
+			
+			int posX = 30;
+			int posY = 70;
+			for(int i = 0;i<numEnemies;i++) {
+				enemiesList[i] = new Alien(posX,posY,ALIEN_MOVEMENT_L2);
+				posX += 80;
+			}
+			
+		}
+		else if(level == 3) {
+			
+			int posX = 30;
+			int posY = 70;
+			for(int i = 0;i<numEnemies;i++) {
+				enemiesList[i] = new Alien(posX,posY,ALIEN_MOVEMENT_L3);
+				posX += 80;
+			}
+			
+		}
+
 	}
 	
 	public void startEnemies() {
-		for(int i = 0;i<ENEMIES;i++) {
+		for(int i = 0;i<numEnemies;i++) {
 			enemiesList[i].start();
 		}
 	}
@@ -344,10 +405,18 @@ public class Controller {
 	// === GETTERS AND SETTERS
 	//
 	
+	public int getNumLevel() {
+		return numLevel;
+	}
+
+	public void setNumLevel(int numLevel) {
+		this.numLevel = numLevel;
+	}
+	
+	
 	public Player getPlayer() {
 		return player;
 	}
-
 
 	public void setPlayer(Player player) {
 		this.player = player;
@@ -391,6 +460,12 @@ public class Controller {
 		return shotsEnemiesList;
 	}
 
+	public int getNumEnemies() {
+		return numEnemies;
+	}
 
-
+	public void setNumEnemies(int numEnemies) {
+		this.numEnemies = numEnemies;
+	}
+	
 }

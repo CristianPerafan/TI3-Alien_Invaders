@@ -18,13 +18,13 @@ public class Alien extends Thread{
 	private int deltaY;
 	private boolean isAlive;
 	
-	public Alien(int posX, int posY) {
+	public Alien(int posX, int posY, int deltaY) {
 		img = new Image("/media/alien.png");
 		this.posX = posX;
 		this.posY = posY;
 		width = WIDTH;
 		height = HEIGHT;
-		deltaY = 10;
+		this.deltaY = deltaY;
 		isAlive = true;
 	}
 	
