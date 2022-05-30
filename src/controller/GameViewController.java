@@ -67,7 +67,7 @@ public class GameViewController implements Initializable {
 
 	private volatile boolean stopAll = false;
 	private volatile boolean canShot = true;
-	
+	private volatile boolean stopBoss = false;
 
 
 	@Override
@@ -334,14 +334,32 @@ public class GameViewController implements Initializable {
 					
 					if(tempPlayer.isAlive()==true) {
 						
-						last = LocalTime.now();
 						
-						Duration period = Duration.between(first,last);
-						int seconds = (int) period.getSeconds();
+						if(main.getNumLevel() == 3) {
+							
+							last = LocalTime.now();
+							
+							Duration period = Duration.between(first,last);
+							int seconds = (int) period.getSeconds();
+							
+							main.addWinPlayer(tempPlayer, seconds);
+							
+							finishGameByWin();
+							
+						}
+						else {
+							
+							last = LocalTime.now();
+							
+							Duration period = Duration.between(first,last);
+							int seconds = (int) period.getSeconds();
+							
+							main.addWinPlayer(tempPlayer, seconds);
+							
+							finishGameByWin();
+						}
 						
-						main.addWinPlayer(tempPlayer, seconds);
 						
-						finishGameByWin();
 						
 	
 					}
@@ -514,6 +532,18 @@ public class GameViewController implements Initializable {
 		}).start();
 	}
 	
+	@SuppressWarnings("unused")
+	private void FinallBoss() {
+		new Thread(()-> {
+			
+			while(stopBoss == false) {
+				
+			}
+			
+			
+		}).start();
+	}
+	
 
 
 	private void shot() {
@@ -551,6 +581,8 @@ public class GameViewController implements Initializable {
 			
 		}).start();
 	}
+	
+	
 	
 	private void updateScore() {
 		Platform.runLater(()->{

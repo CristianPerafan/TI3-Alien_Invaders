@@ -33,6 +33,8 @@ public class Controller {
 	private ArrayList<Player> registerPlayers;
 	private File file; 
 	
+	private FinalBoss boss;
+	
 	
 	public Controller(int level) {
 		super();
@@ -355,11 +357,18 @@ public class Controller {
 		}
 			
 	}
-	
-	
-	
+		
 	private int randomNumber() {
 		return (int) (Math.random()*(enemiesList.length));
+	}
+	
+	public void setUpFinalBoss() {
+		
+		int posX = (WIDTHGAME /2)-20;
+		int posY = 120;
+		
+		boss = new FinalBoss(posX, posY);
+		
 	}
 	
 	public void serialize() throws IOException {
@@ -409,6 +418,78 @@ public class Controller {
 			
 		});
 	}
+	
+	public void sortByName() {
+		int n = registerPlayers.size();
+		boolean flag = true;
+		
+		for(int i = 0;i<n && flag;i++) {
+			flag = false;
+			for(int j = 1;j<n-i;j++) {
+				if(registerPlayers.get(j).compareByName(registerPlayers.get(j-1))<0) {
+					Player temp = registerPlayers.get(j);
+					registerPlayers.set(j,registerPlayers.get(j-1));
+					registerPlayers.set(j-1, temp);
+					flag = true;
+				}
+			}
+		}
+		
+		
+		
+	}
+	
+	
+	public boolean verifyPlayerexists(Player player) {
+		sortByName();
+		
+		boolean flag = false; 
+		int inicio = 0;
+		int fin = registerPlayers.size()-1;
+		int medio =0; 
+		
+		while(inicio <= fin &&!flag) {
+			
+			medio = ((inicio+fin)/2); 
+			
+		
+			if(registerPlayers.get(medio).compareByName(player)==0) {
+				flag = true; 
+			}else if(registerPlayers.get(medio).compareByName(player)<0) {
+				fin = medio - 1; 
+			}else{
+				inicio = medio + 1; 
+			}
+		}
+		return flag; 
+	}
+	
+	public int ubicationOldPlayer(Player player) {
+		
+		boolean flag = false; 
+		int inicio = 0;
+		int fin = registerPlayers.size()-1;
+		int medio =0; 
+		int answer = 0; 
+		
+		while(inicio <= fin &&!flag) {
+			
+			medio = ((inicio+fin)/2); 
+			
+			if(registerPlayers.get(medio).compareByName(player)==0) {
+				answer = medio; 
+				flag = true; 
+			}else if(registerPlayers.get(medio).compareByName(player)<0) {
+				fin = medio + 1; 
+			}else{
+				inicio = medio + 1; 
+			}
+		}	
+		
+		return answer; 
+	}
+	
+	
 	
 	//
 	// === GETTERS AND SETTERS
@@ -476,73 +557,17 @@ public class Controller {
 	public void setNumEnemies(int numEnemies) {
 		this.numEnemies = numEnemies;
 	}
-	
-	public void sortByName() {
-		int n = registerPlayers.size();
-		boolean flag = true;
-		
-		for(int i = 0;i<n && flag;i++) {
-			flag = false;
-			for(int j = 1;j<n-i;j++) {
-				if(registerPlayers.get(j).compareByName(registerPlayers.get(j-1))<0) {
-					Player temp = registerPlayers.get(j);
-					registerPlayers.set(j,registerPlayers.get(j-1));
-					registerPlayers.set(j-1, temp);
-					flag = true;
-				}
-			}
-		}
-		
-		
-		
+
+	public FinalBoss getBoss() {
+		return boss;
 	}
-	public boolean verifyPlayerexists(Player player) {
-		sortByName();
-		
-		boolean flag = false; 
-		int inicio = 0;
-		int fin = registerPlayers.size()-1;
-		int medio =0; 
-		
-		while(inicio <= fin &&!flag) {
-			
-			medio = ((inicio+fin)/2); 
-			
-		
-			if(registerPlayers.get(medio).compareByName(player)==0) {
-				flag = true; 
-			}else if(registerPlayers.get(medio).compareByName(player)<0) {
-				fin = medio - 1; 
-			}else{
-				inicio = medio + 1; 
-			}
-		}
-		return flag; 
+
+	public void setBoss(FinalBoss boss) {
+		this.boss = boss;
 	}
 	
-	public int ubicationOldPlayer(Player player) {
-		
-		boolean flag = false; 
-		int inicio = 0;
-		int fin = registerPlayers.size()-1;
-		int medio =0; 
-		int answer = 0; 
-		
-		while(inicio <= fin &&!flag) {
-			
-			medio = ((inicio+fin)/2); 
-			
-			if(registerPlayers.get(medio).compareByName(player)==0) {
-				answer = medio; 
-				flag = true; 
-			}else if(registerPlayers.get(medio).compareByName(player)<0) {
-				fin = medio + 1; 
-			}else{
-				inicio = medio + 1; 
-			}
-		}	
-		
-		return answer; 
-	}
+	
+	
+	
 	
 }

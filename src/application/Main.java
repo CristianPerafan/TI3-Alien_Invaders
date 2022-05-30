@@ -266,6 +266,14 @@ public class Main extends Application {
 		gameController.sortScorePlayers();
 	}
 	
+	public void setUpFinaBoss() {
+		gameController.setUpFinalBoss();
+	}
+	
+	public int getNumLevel() {
+		return gameController.getNumLevel();
+	}
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
