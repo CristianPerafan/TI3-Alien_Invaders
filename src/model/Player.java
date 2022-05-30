@@ -125,7 +125,17 @@ public class Player implements Serializable{
 		return "Player [Name " + name + ", score" + score + "]";
 	}
 	
-	
+	public int compareByName(Player other) {
+		int out = 0;
+		if(this.getName().compareTo(other.getName())>0) {
+			out = 1;
+		}
+		else if(this.getName().compareTo(other.getName())<0) {
+			out = -1;
+		}
+		
+		return out;
+	}
 	
 	
 	
