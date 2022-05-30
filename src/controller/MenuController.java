@@ -44,7 +44,8 @@ public class MenuController implements Initializable {
 	@FXML
     public void startGame(ActionEvent event) {
 		stopSong();
-		main.showRegisterView();
+		//main.showRegisterView();
+		main.showLevelsView();
     }
 	
 	public void setMain(Main main) {

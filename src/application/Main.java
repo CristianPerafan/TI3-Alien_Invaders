@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import controller.GameViewController;
+import controller.LevelsViewController;
 import controller.MenuController;
 import controller.RegisterController;
 import controller.ScoreController;
@@ -28,11 +29,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			gameController = new Controller();
 			
-			if(gameController.validatePlayersFile()==true) {
-				toDeserilize();
-			}
+			toInitalizeController();
 			
 			showMenuView();
 			
@@ -41,10 +39,19 @@ public class Main extends Application {
 		}
 	}
 	
+	private void toInitalizeController() {
+		gameController = new Controller();
+		
+		if(gameController.validatePlayersFile()==true) {
+			toDeserilize();
+		}
+	}
 	
 	public void gameView() {
 	
 		try {
+			
+			
 			
 			currentStage.close();
 			
@@ -101,6 +108,10 @@ public class Main extends Application {
 	
 	public void showRegisterView() {
 		try {
+			currentStage.close();
+			
+			toInitalizeController();
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/RegisterView.fxml"));
 			BorderPane root;
 			root = (BorderPane)loader.load();
@@ -134,6 +145,26 @@ public class Main extends Application {
 			stage.show();
 			currentStage = stage;
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void showLevelsView(){
+		try {
+			currentStage.close();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("../ui/LevelsView.fxml"));
+			BorderPane root;
+			root = (BorderPane)loader.load();
+			LevelsViewController controller = loader.getController();
+			controller.setMain(this);
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("../ui/application.css").toExternalForm());
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.show();
+			currentStage = stage;
+			
+		} catch(IOException e){
 			e.printStackTrace();
 		}
 	}
