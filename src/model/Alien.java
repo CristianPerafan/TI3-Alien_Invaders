@@ -3,7 +3,7 @@ package model;
 import javafx.scene.image.Image;
 
 public class Alien extends Thread{
-	
+
 	private volatile boolean stop = false;
 	
 	static final int WIDTH = 50;  

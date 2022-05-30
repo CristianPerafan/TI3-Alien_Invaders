@@ -170,6 +170,8 @@ public class Controller {
 		}
 	}
 	
+	
+	
 	public void validatePlayerIsAlive() {
 		
 		for(int i = 0;i<enemiesList.length;i++) {
@@ -238,10 +240,31 @@ public class Controller {
 			if(shotsEnemiesList.get(i).getPosY()>HEIGHTGAME) {
 				shotsEnemiesList.remove(i);
 			}
+			else if( validateShotKillPlayer(shotsEnemiesList.get(i)) == true) {
+				allEnemiesDead = true;
+				stopEnemies();
+				player.setAlive(false);
+				player.switchImage();
+			}
 			else {
 				shotsEnemiesList.get(i).moveDown();
 			}
 		}
+	}
+	
+	private boolean validateShotKillPlayer(Shot s) {
+		boolean out = false;
+		
+		if(s.getPosX() >= player.getPosX()-(player.getWidth()/2)) {
+			if(s.getPosX() <= player.getPosX()+(player.getWidth()/2)) {
+				if(s.getPosY() >= player.getPoxY()) {
+					out = true;
+				}
+				
+			}
+		}
+		
+		return out;
 	}
 	
 	public void addEnemyShot() {

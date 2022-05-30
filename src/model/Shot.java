@@ -9,7 +9,7 @@ public class Shot {
 	
 	static final int WIDTH = 15;  
 	static final int HEIGHT = 15;	
-	
+
 	//Attributes
 	private int posX;
 	private int posY;

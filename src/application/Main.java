@@ -204,7 +204,7 @@ public class Main extends Application {
 	public ArrayList<Player> listRegisterPlayer(){
 		return gameController.getRegisterPlayers();
 	}
-	
+
 	public void uptadeEnemyShots() {
 		gameController.uptadeEnemyShot();
 	}

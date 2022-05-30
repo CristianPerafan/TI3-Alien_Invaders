@@ -48,7 +48,6 @@ public class GameViewController implements Initializable {
 	
 	private GraphicsContext gc;
 	private GraphicsContext gcShot;
-	@SuppressWarnings("unused")
 	private GraphicsContext gcEnemyShot;
 	private GraphicsContext gcAlien;
 	
@@ -65,8 +64,9 @@ public class GameViewController implements Initializable {
 	private boolean right;
 	@SuppressWarnings("unused")
 	private boolean space;
-	
+
 	private volatile boolean stopAll = false;
+	private volatile boolean canShot = true;
 	
 
 
@@ -121,23 +121,49 @@ public class GameViewController implements Initializable {
 	void keyPressed(KeyEvent e) {
 		
 		if(e.getCode() == KeyCode.LEFT) {
-			moveLeft();
-			updateScore();
+			
+			if(tempPlayer.isAlive() == true) {
+				moveLeft();
+				updateScore();
+			}
+			
 		}
 		else if(e.getCode() == KeyCode.RIGHT) {
-	
-			moveRight();
-			updateScore();
+			if(tempPlayer.isAlive() == true) {
+				moveRight();
+				updateScore();
+			}
+			
 		}
 		else if(e.getCode() == KeyCode.SPACE) {
 			
-			main.addAEnemyShot();
-			main.addShotPlayer(tempPlayer.getPosX(),tempPlayer.getPoxY(),1);
-			soundShot();
+			if(canShot == true) {
+				if(tempPlayer.isAlive() == true) {
+					main.addAEnemyShot();
+					main.addShotPlayer(tempPlayer.getPosX(),tempPlayer.getPoxY(),1);
+					soundShot();
+					validateCanShot();
+				}
+			}
 			
+			
+		
 		}
 	
 		
+	}
+	
+	private void validateCanShot() {
+		new Thread(()->{
+			canShot = false;
+			try {
+				Thread.sleep(1500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			canShot = true;
+		}).start();
 	}
 	
 	
