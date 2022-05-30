@@ -1,13 +1,14 @@
 package model;
 
+import enumerations.TypeOfShot;
 import javafx.scene.image.Image;
 
 public class Shot {
 	
 	
 	
-	static final int WIDTH = 10;  
-	static final int HEIGHT = 10;	
+	static final int WIDTH = 15;  
+	static final int HEIGHT = 15;	
 	
 	//Attributes
 	private int posX;
@@ -16,15 +17,39 @@ public class Shot {
 	private int width;
 	private int height;
 	private Image img;
+	@SuppressWarnings("unused")
+	private TypeOfShot type;
 
-	public Shot(int posX, int posY) {
+	public Shot(int posX, int posY, int id) {
 		super();
-		img = new Image("/media/shot.png");
+		
 		this.posX = posX;
 		this.posY = posY;
 		width = WIDTH;
 		height = HEIGHT;
 		deltaY = 10;
+		
+		selectType(id);
+		selectImage(id);
+		
+	}
+	
+	private void selectImage(int id) {
+		if(id == 1) {
+			img = new Image("/media/shot.png");
+		}
+		else {
+			img = new Image("/media/evilProject.png");
+		}
+	}
+	
+	private void selectType(int id) {
+		if(id == 1) {
+			type = TypeOfShot.PLAYER;
+		}
+		else {
+			type = TypeOfShot.ALIEN;
+		}
 	}
 	
 	
@@ -69,8 +94,12 @@ public class Shot {
 	}
 
 
-	public void move() {
+	public void moveUp() {
 		posY -= deltaY;
+	}
+	
+	public void moveDown() {
+		posY += deltaY;
 	}
 
 

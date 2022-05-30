@@ -48,6 +48,8 @@ public class GameViewController implements Initializable {
 	
 	private GraphicsContext gc;
 	private GraphicsContext gcShot;
+	@SuppressWarnings("unused")
+	private GraphicsContext gcEnemyShot;
 	private GraphicsContext gcAlien;
 	
 	private Media sound;
@@ -86,6 +88,8 @@ public class GameViewController implements Initializable {
 		
 		gcShot = gameCanvas.getGraphicsContext2D();
 		
+		gcEnemyShot = gameCanvas.getGraphicsContext2D();
+		
 		gcAlien = gameCanvas.getGraphicsContext2D();
 		
 	}
@@ -103,8 +107,11 @@ public class GameViewController implements Initializable {
 		
 		shot();
 		
+		
 		main.startEnemies();
 		enemies();
+		
+		enemiesShot();
 
 	}
 	
@@ -114,16 +121,18 @@ public class GameViewController implements Initializable {
 	void keyPressed(KeyEvent e) {
 		
 		if(e.getCode() == KeyCode.LEFT) {
-		
 			moveLeft();
+			updateScore();
 		}
 		else if(e.getCode() == KeyCode.RIGHT) {
 	
 			moveRight();
+			updateScore();
 		}
 		else if(e.getCode() == KeyCode.SPACE) {
-	
-			main.addShot(tempPlayer.getPosX(),tempPlayer.getPoxY());
+			
+			main.addAEnemyShot();
+			main.addShotPlayer(tempPlayer.getPosX(),tempPlayer.getPoxY(),1);
 			soundShot();
 			
 		}
@@ -183,23 +192,6 @@ public class GameViewController implements Initializable {
 
 	}
 	
-
-	
-	private void paintShot(ArrayList<Shot> s){
-		
-		for(int i = 0;i<s.size();i++) {
-			
-			Shot aux = s.get(i);
-			
-			Platform.runLater(() ->{
-				gcShot.drawImage(aux.getImg(), aux.getPosX(), aux.getPosY(), 
-						aux.getWidth(), aux.getHeight());
-			});
-		}
-
-		
-
-	}
 	
 	private void paintPlayer() {
 	
@@ -234,6 +226,41 @@ public class GameViewController implements Initializable {
 			}
 			
 		});
+		
+
+	}
+	
+	private void paintEnemyShot(ArrayList<Shot> s) {
+		for(int i = 0;i<s.size();i++) {
+				Shot temp = s.get(i);
+				
+				Platform.runLater(() ->{
+					gcEnemyShot.drawImage(temp.getImg(), temp.getPosX(), temp.getPosY(), 
+							temp.getWidth(), temp.getHeight());
+				});
+		}
+	}
+	
+	private void clearEnemyShot(ArrayList<Shot> s) {
+		for(int i = 0;i<s.size();i++) {
+			Shot temp = s.get(i);
+			
+			gcEnemyShot.clearRect(temp.getPosX(),temp.getPosY(),temp.getWidth(),temp.getHeight());
+		}
+	}
+	
+	private void paintShot(ArrayList<Shot> s){
+		
+		for(int i = 0;i<s.size();i++) {
+			
+			Shot aux = s.get(i);
+			
+			Platform.runLater(() ->{
+				gcShot.drawImage(aux.getImg(), aux.getPosX(), aux.getPosY(), 
+						aux.getWidth(), aux.getHeight());
+			});
+		}
+
 		
 
 	}
@@ -280,8 +307,6 @@ public class GameViewController implements Initializable {
 				else {
 					
 					if(tempPlayer.isAlive()==true) {
-						
-						System.out.println("Final");
 						
 						last = LocalTime.now();
 						
@@ -432,6 +457,37 @@ public class GameViewController implements Initializable {
 		}
 
 	}
+	
+	private void enemiesShot() {
+		new Thread(()->{
+			
+			while(stopAll == false) {
+				
+				ArrayList<Shot> temp = main.getShotsEnemiesList();
+				
+				
+				if(temp.size()>0) {
+					
+					paintEnemyShot(temp);
+					
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					clearEnemyShot(temp);
+					
+					main.uptadeEnemyShots();
+					
+				}
+				
+			}
+				
+		}).start();
+	}
+	
 
 
 	private void shot() {
@@ -463,6 +519,7 @@ public class GameViewController implements Initializable {
 					}
 					
 					
+						
 				}
 
 			
@@ -499,6 +556,7 @@ public class GameViewController implements Initializable {
 		
 		player.play();
 	}
+	
 	
 	public void setMain(Main main) {
 		this.main = main;

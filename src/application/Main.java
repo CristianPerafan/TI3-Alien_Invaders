@@ -148,8 +148,8 @@ public class Main extends Application {
 		gameController.updatePlayer(id);
 	}
 	
-	public void addShot(int posX, int posY) {
-		gameController.addShot(posX, posY);
+	public void addShotPlayer(int posX, int posY, int id) {
+		gameController.addShotPlayer(posX, posY,id);
 	}
 	
 	public void updateShots() {
@@ -185,8 +185,16 @@ public class Main extends Application {
 		return gameController.isAllEnemiesDead();
 	}
 	
-	public static void main(String[] args) {
-		launch(args);
+	public void addAEnemyShot() {
+		gameController.addEnemyShot();
+	}
+	
+	public int getSecondsTimeEnemyShot() {
+		return gameController.getTimeSecondsShotEnemies();
+	}
+	
+	public ArrayList<Shot> getShotsEnemiesList() {
+		return gameController.getShotsEnemiesList();
 	}
 	
 	public void addWinPlayer(Player player, int seconds) {
@@ -195,6 +203,10 @@ public class Main extends Application {
 	
 	public ArrayList<Player> listRegisterPlayer(){
 		return gameController.getRegisterPlayers();
+	}
+	
+	public void uptadeEnemyShots() {
+		gameController.uptadeEnemyShot();
 	}
 	
 	public void toSerilize() {
@@ -224,6 +236,12 @@ public class Main extends Application {
 	public void sortListPlayers() {
 		gameController.sortScorePlayers();
 	}
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+	
+	
 	
 	
 	

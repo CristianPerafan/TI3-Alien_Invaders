@@ -17,10 +17,13 @@ public class Controller {
 	static final int MOVEMENT = 8;
 	static final int ENEMIES = 9; 
 	static final int SCOREBYENEMY = 200;
+	static final int TIMESECONDSHOTENEMIES = 5;
 	
 	//Attributes
+	private int timeSecondsShotEnemies;
 	private Player player;
 	private ArrayList<Shot> shotsList;
+	private ArrayList<Shot> shotsEnemiesList;
 	private Alien [] enemiesList;
 	private boolean allEnemiesDead;
 	private ArrayList<Player> registerPlayers;
@@ -30,7 +33,11 @@ public class Controller {
 	public Controller() {
 		super();
 		
+		timeSecondsShotEnemies = TIMESECONDSHOTENEMIES;
+		
 		shotsList = new ArrayList<Shot>();
+		shotsEnemiesList = new ArrayList<Shot>();
+		
 		registerPlayers = new ArrayList<Player>();
 		file = new File(".\\files\\playersData.txt");
 		int posX = (WIDTHGAME /2)-20;
@@ -94,9 +101,9 @@ public class Controller {
 		enemiesList = aux; 
 	}
 
-	public void addShot(int posX, int posY){
+	public void addShotPlayer(int posX, int posY, int id){
 		
-		Shot temp = new Shot(posX+15,posY-15);
+		Shot temp = new Shot(posX+15,posY-15,id);
 		shotsList.add(temp);
 	}
 	
@@ -157,7 +164,7 @@ public class Controller {
 				shotsList.remove(i);
 			}
 			else {
-				shotsList.get(i).move();
+				shotsList.get(i).moveUp();
 			}
 			
 		}
@@ -195,45 +202,6 @@ public class Controller {
 		}
 	}
 	
-	//
-	// === GETTERS AND SETTERS
-	//
-	
-	public Player getPlayer() {
-		return player;
-	}
-
-
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-
-	public ArrayList<Shot> getShotsList() {
-		return shotsList;
-	}
-
-	public void setShotsList(ArrayList<Shot> shotsList) {
-		this.shotsList = shotsList;
-	}
-	
-	public int getShotsListSize() {
-		return shotsList.size();
-	}
-	
-	public void setPlayerName(String name) {
-		player.setName(name);
-	}
-	
-	public Alien[] getEnemiesList() {
-		
-		return enemiesList;
-	}
-
-	public boolean isAllEnemiesDead() {
-		allEnemiesDead = validateEnemiesAreDead();
-		return allEnemiesDead;
-	}
-	
 	private boolean validateEnemiesAreDead() {
 		
 		boolean out = true;
@@ -263,6 +231,42 @@ public class Controller {
 		Player obj = new Player(player.getName(),finalScore);
 		registerPlayers.add(obj);
 		
+	}
+	
+	public void uptadeEnemyShot() {
+		for(int i = 0;i<shotsEnemiesList.size();i++) {
+			if(shotsEnemiesList.get(i).getPosY()>HEIGHTGAME) {
+				shotsEnemiesList.remove(i);
+			}
+			else {
+				shotsEnemiesList.get(i).moveDown();
+			}
+		}
+	}
+	
+	public void addEnemyShot() {
+		
+		int index = randomNumber();
+	
+		 
+		if(index < enemiesList.length) {
+			
+			
+			int posX = enemiesList[index].getPosX();
+			int posY = enemiesList[index].getPosY();
+			
+			
+			Shot s = new Shot(posX,posY+10,2);
+			
+			shotsEnemiesList.add(s);
+		}
+			
+	}
+	
+	
+	
+	private int randomNumber() {
+		return (int) (Math.random()*(enemiesList.length));
 	}
 	
 	public void serialize() throws IOException {
@@ -312,5 +316,58 @@ public class Controller {
 			
 		});
 	}
+	
+	//
+	// === GETTERS AND SETTERS
+	//
+	
+	public Player getPlayer() {
+		return player;
+	}
+
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+	public ArrayList<Shot> getShotsList() {
+		return shotsList;
+	}
+
+	public void setShotsList(ArrayList<Shot> shotsList) {
+		this.shotsList = shotsList;
+	}
+	
+	public int getShotsListSize() {
+		return shotsList.size();
+	}
+	
+	public void setPlayerName(String name) {
+		player.setName(name);
+	}
+	
+	public Alien[] getEnemiesList() {
+		
+		return enemiesList;
+	}
+
+	public boolean isAllEnemiesDead() {
+		allEnemiesDead = validateEnemiesAreDead();
+		return allEnemiesDead;
+	}
+
+	public int getTimeSecondsShotEnemies() {
+		return timeSecondsShotEnemies;
+	}
+
+	public void setTimeSecondsShotEnemies(int timeSecondsShotEnemies) {
+		this.timeSecondsShotEnemies = timeSecondsShotEnemies;
+	}
+
+	public ArrayList<Shot> getShotsEnemiesList() {
+		return shotsEnemiesList;
+	}
+
+
 
 }
